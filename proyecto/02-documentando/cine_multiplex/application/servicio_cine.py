@@ -1,49 +1,63 @@
 """Aplicación: Servicio principal de Cine Flolix."""
 
-from cineflolix.domain.pelicula import PeliculaComercial, PeliculaInfantil, PeliculaClasica
-from cineflolix.domain.sala import Sala
-from cineflolix.domain.sesion import Sesion
-from cineflolix.domain.entrada import Entrada
+from cine_multiplex.domain.pelicula import PeliculaComercial, PeliculaInfantil, PeliculaClasica
+from cine_multiplex.domain.sala import Sala
+from cine_multiplex.domain.sesion import Sesion
+from cine_multiplex.domain.entrada import Entrada
 
 class ServicioCine:
     """Coordina las operaciones del cine."""
     
     def __init__(self, repositorio):
-        self.repo = repositorio
+        """Inicializa el servicio con un repositorio."""
+        self.repositorio = repositorio
 
     # --- Gestión de Películas ---
     def registrar_pelicula_comercial(self, titulo, duracion_minutos, clasificacion, genero, distribuidora):
+        """Registra una película comercial."""
         pelicula = PeliculaComercial(titulo, duracion_minutos, clasificacion, genero, distribuidora)
-        self.repo.guardar_pelicula(pelicula)
+        self.repositorio.guardar_pelicula(pelicula)
         return pelicula
 
     def registrar_pelicula_infantil(self, titulo, duracion_minutos, clasificacion, genero, edad_minima_anios):
+        """Registra una película infantil."""
         pelicula = PeliculaInfantil(titulo, duracion_minutos, clasificacion, genero, edad_minima_anios)
-        self.repo.guardar_pelicula(pelicula)
+        self.repositorio.guardar_pelicula(pelicula)
         return pelicula
 
     def registrar_pelicula_clasica(self, titulo, duracion_minutos, clasificacion, genero, anio_estreno):
+        """Registra una película clásica."""
         pelicula = PeliculaClasica(titulo, duracion_minutos, clasificacion, genero, anio_estreno)
-        self.repo.guardar_pelicula(pelicula)
+        self.repositorio.guardar_pelicula(pelicula)
         return pelicula
 
     def listar_peliculas(self):
-        return self.repo.listar_peliculas()
+        """Lista todas las películas registradas."""
+        return self.repositorio.listar_peliculas()
 
     # --- Gestión de Salas ---
     def crear_sala(self, numero, capacidad_personas, tipo_pantalla="2D"):
+        """Crea y registra una nueva sala."""
         sala = Sala(numero, capacidad_personas, tipo_pantalla)
-        self.repo.guardar_sala(sala)
+        self.repositorio.guardar_sala(sala)
         return sala
 
     def listar_salas(self):
-        return self.repo.listar_salas()
+        """Lista todas las salas registradas."""
+        return self.repositorio.listar_salas()
 
     # --- Gestión de Sesiones ---
     def programar_sesion(self, id_sesion, titulo_pelicula, numero_sala, fecha_hora_str):
-        """Programa una sesión. fecha_hora_str formato: 'YYYY-MM-DD HH:MM'"""
-        pelicula = self.repo.obtener_pelicula(titulo_pelicula)
-        sala = self.repo.obtener_sala(numero_sala)
+        """Programa una sesión.
+        
+        Args:
+            id_sesion (str): ID único para la sesión.
+            titulo_pelicula (str): Título de la película a proyectar.
+            numero_sala (int): Número de la sala.
+            fecha_hora_str (str): Fecha y hora en formato 'YYYY-MM-DD HH:MM'.
+        """
+        pelicula = self.repositorio.obtener_pelicula(titulo_pelicula)
+        sala = self.repositorio.obtener_sala(numero_sala)
         
         if not pelicula:
             raise ValueError(f"Película '{titulo_pelicula}' no encontrada.")
@@ -56,22 +70,29 @@ class ServicioCine:
 
         # Verificar solapamientos (simplificado: misma sala, misma hora exacta o rango)
         # Aquí haremos chequeo simple de hora exacta para MVP, idealmente rango duración
-        sesiones_sala = [s for s in self.repo.listar_sesiones() if s.sala.numero == numero_sala]
+        sesiones_sala = [sesion for sesion in self.repositorio.listar_sesiones() if sesion.sala.numero == numero_sala]
         
         sesion = Sesion(id_sesion, pelicula, sala, fecha_hora_str)
-        self.repo.guardar_sesion(sesion)
+        self.repositorio.guardar_sesion(sesion)
         return sesion
 
     def listar_sesiones(self):
-        return self.repo.listar_sesiones()
+        """Lista todas las sesiones programadas."""
+        return self.repositorio.listar_sesiones()
 
     def obtener_sesion(self, id_sesion):
-        return self.repo.obtener_sesion(id_sesion)
+        """Obtiene una sesión por su ID."""
+        return self.repositorio.obtener_sesion(id_sesion)
 
     # --- Gestión de Entradas ---
     def vender_entrada(self, id_sesion, tipo_tarifa):
-        """Vende una entrada para la sesión indicada."""
-        sesion = self.repo.obtener_sesion(id_sesion)
+        """Vende una entrada para la sesión indicada.
+        
+        Args:
+            id_sesion (str): ID de la sesión.
+            tipo_tarifa (str): Tipo de tarifa ('General', 'Reducida', 'Estudiante').
+        """
+        sesion = self.repositorio.obtener_sesion(id_sesion)
         if not sesion:
             raise ValueError("Sesión no encontrada.")
             
@@ -89,21 +110,22 @@ class ServicioCine:
         
         # Crear ticket
         entrada = Entrada(sesion, precio, tipo_tarifa)
-        self.repo.guardar_entrada(entrada)
+        self.repositorio.guardar_entrada(entrada)
         
         # Actualizar sesión en persistencia (por cambio de aforo)
-        self.repo.guardar_sesion(sesion)
+        self.repositorio.guardar_sesion(sesion)
         
         return entrada
 
     def anular_entrada(self, id_entrada):
+        """Anula una entrada vendida dado su ID."""
         # Esta lógica requeriría buscar la entrada por ID, obtener su sesión, y anular.
         # Por simplicidad de la lista, hacemos búsqueda lineal.
-        entradas = self.repo.listar_entradas()
+        entradas = self.repositorio.listar_entradas()
         entrada_encontrada = None
-        for e in entradas:
-            if e.id == id_entrada:
-                entrada_encontrada = e
+        for entrada in entradas:
+            if entrada.id == id_entrada:
+                entrada_encontrada = entrada
                 break
         
         if entrada_encontrada:
@@ -112,16 +134,17 @@ class ServicioCine:
             # Eliminar de la lista de vendidas? O marcarla anulada?
             # El requisito dice "Anular entradas", la entidad Entrada podría tener estado.
             # Aquí la eliminamos de la lista para simplificar o dejaría ahí pero necesitamos actualizar repos.
-            self.repo.entradas.remove(entrada_encontrada) # Hack acceso directo para MVP
-            self.repo.guardar_sesion(sesion)
-            self.repo.guardar_datos()
+            self.repositorio.entradas.remove(entrada_encontrada) # Hack acceso directo para MVP
+            self.repositorio.guardar_sesion(sesion)
+            self.repositorio.guardar_datos()
             return True
         return False
         
     # --- Estadísticas ---
     def informe_ventas(self):
-        total_recaudado = sum(e.precio_euros for e in self.repo.listar_entradas())
-        entradas_vendidas = len(self.repo.listar_entradas())
+        """Genera un informe con total recaudado y entradas vendidas."""
+        total_recaudado = sum(entrada.precio_euros for entrada in self.repositorio.listar_entradas())
+        entradas_vendidas = len(self.repositorio.listar_entradas())
         return {
             "total_recaudado": total_recaudado,
             "entradas_vendidas": entradas_vendidas
