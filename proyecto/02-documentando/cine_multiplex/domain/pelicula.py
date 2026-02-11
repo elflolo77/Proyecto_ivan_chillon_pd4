@@ -2,9 +2,9 @@
 
 class Pelicula:
     """Clase base para películas."""
-    def __init__(self, titulo, duracion, clasificacion, genero):
+    def __init__(self, titulo, duracion_minutos, clasificacion, genero):
         self._titulo = titulo
-        self._duracion = duracion # en minutos
+        self._duracion_minutos = duracion_minutos # en minutos
         self._clasificacion = clasificacion
         self._genero = genero
         self._en_cartelera = True
@@ -14,8 +14,8 @@ class Pelicula:
         return self._titulo
 
     @property
-    def duracion(self):
-        return self._duracion
+    def duracion_minutos(self):
+        return self._duracion_minutos
 
     @property
     def clasificacion(self):
@@ -39,26 +39,26 @@ class Pelicula:
 
 class PeliculaComercial(Pelicula):
     """Estrenos y películas de gran difusión."""
-    def __init__(self, titulo, duracion, clasificacion, genero, distribuidora):
-        super().__init__(titulo, duracion, clasificacion, genero)
+    def __init__(self, titulo, duracion_minutos, clasificacion, genero, distribuidora):
+        super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.distribuidora = distribuidora
 
     def mostrar_info(self):
-        return f"[COMERCIAL] {self.titulo} ({self.duracion} min) - {self.genero}"
+        return f"[COMERCIAL] {self.titulo} ({self.duracion_minutos} min) - {self.genero}"
 
 class PeliculaInfantil(Pelicula):
     """Películas para público familiar e infantil."""
-    def __init__(self, titulo, duracion, clasificacion, genero, edad_minima):
-        super().__init__(titulo, duracion, clasificacion, genero)
-        self.edad_minima = edad_minima
+    def __init__(self, titulo, duracion_minutos, clasificacion, genero, edad_minima_anios):
+        super().__init__(titulo, duracion_minutos, clasificacion, genero)
+        self.edad_minima_anios = edad_minima_anios
 
     def mostrar_info(self):
-        return f"[INFANTIL] {self.titulo} (Min: {self.edad_minima} años) - {self.genero}"
+        return f"[INFANTIL] {self.titulo} (Min: {self.edad_minima_anios} años) - {self.genero}"
 
 class PeliculaClasica(Pelicula):
     """Películas antiguas o reestrenos."""
-    def __init__(self, titulo, duracion, clasificacion, genero, anio_estreno):
-        super().__init__(titulo, duracion, clasificacion, genero)
+    def __init__(self, titulo, duracion_minutos, clasificacion, genero, anio_estreno):
+        super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.anio_estreno = anio_estreno
 
     def mostrar_info(self):

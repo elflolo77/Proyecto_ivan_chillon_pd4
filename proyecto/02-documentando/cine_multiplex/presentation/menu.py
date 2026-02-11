@@ -1,4 +1,4 @@
- """Presentación: Menú de consola."""
+"""Presentación: Menú de consola."""
 
 from cineflolix.application.servicio_cine import ServicioCine
 
@@ -56,20 +56,20 @@ class MenuCine:
                 print(f"Error: {e}")
         elif op in ["2", "3", "4"]:
             titulo = input("Título: ")
-            duracion = int(input("Duración (min): "))
+            duracion_minutos = int(input("Duración (min): "))
             clasif = input("Clasificación: ")
             genero = input("Género: ")
             
             try:
                 if op == "2":
                     dist = input("Distribuidora: ")
-                    self.servicio.registrar_pelicula_comercial(titulo, duracion, clasif, genero, dist)
+                    self.servicio.registrar_pelicula_comercial(titulo, duracion_minutos, clasif, genero, dist)
                 elif op == "3":
-                    edad = int(input("Edad mínima: "))
-                    self.servicio.registrar_pelicula_infantil(titulo, duracion, clasif, genero, edad)
+                    edad_anios = int(input("Edad mínima (años): "))
+                    self.servicio.registrar_pelicula_infantil(titulo, duracion_minutos, clasif, genero, edad_anios)
                 elif op == "4":
                     anio = int(input("Año estreno: "))
-                    self.servicio.registrar_pelicula_clasica(titulo, duracion, clasif, genero, anio)
+                    self.servicio.registrar_pelicula_clasica(titulo, duracion_minutos, clasif, genero, anio)
                 print("Película registrada.")
             except ValueError as e:
                 print(f"Error de validación: {e}")
@@ -88,9 +88,9 @@ class MenuCine:
         elif op == "2":
             try:
                 num = int(input("Número de sala: "))
-                cap = int(input("Capacidad: "))
+                cap_personas = int(input("Capacidad (personas): "))
                 pantalla = input("Tipo de pantalla (2D/3D/IMAX): ")
-                self.servicio.crear_sala(num, cap, pantalla)
+                self.servicio.crear_sala(num, cap_personas, pantalla)
                 print("Sala creada.")
             except ValueError:
                 print("Datos numéricos inválidos.")
@@ -124,7 +124,7 @@ class MenuCine:
         
         try:
             entrada = self.servicio.vender_entrada(id_sesion, tarifa)
-            print(f"¡Entrada vendida! ID: {entrada.id} - Precio: ${entrada.tarifa}")
+            print(f"¡Entrada vendida! ID: {entrada.id} - Precio: ${entrada.precio_euros}")
         except Exception as e:
             print(f"Error en venta: {e}")
 

@@ -1,0 +1,16 @@
+{
+    "peliculas": [
+        {
+            "tipo": "Comercial",
+            "titulo": "Jhonson baby",
+            "duracion": 3,
+            "clasificacion": "1",
+            "genero": "Accion",
+            "en_cartelera": true,
+            "distribuidora": "brayana"
+        }
+    ],
+    "salas": [],
+    "sesiones": [],
+    "entradas": []
+}
