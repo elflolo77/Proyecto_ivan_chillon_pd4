@@ -1,6 +1,4 @@
-# Cine Flolix
 
-Bienvenido a **Cine Flolix**, un sistema completo de gestión de cines desarrollado en Python. Este proyecto implementa una arquitectura por capas para facilitar el mantenimiento y la escalabilidad, permitiendo administrar películas, salas, sesiones y ventas de entradas.
 
 ## Características
 
@@ -40,11 +38,3 @@ Para ejecutar la aplicación, utiliza el siguiente comando desde el directorio `
 python main.py
 ```
 
-## Estructura del Proyecto
-
-- `main.py`: Punto de entrada de la aplicación.
-- `cine_multiplex/`:
-    - `domain/`: Contiene las entidades y la lógica de negocio (Peliculas, Salas, Sesiones, Entradas).
-    - `application/`: Servicios que coordinan las operaciones de la aplicación.
-    - `infrastructure/`: Implementaciones de persistencia (memoria) y datos iniciales.
-    - `presentation/`: Interfaz de usuario por consola (menú).

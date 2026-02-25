@@ -4,29 +4,22 @@ Este proyecto es una aplicación de gestión para un cine multiplex, organizada 
 
 ## Estructura del Proyecto
 
-- `proyecto/`: Carpeta principal del proyecto.
-  - `01-capas/`: Código correspondiente a la fase de diseño por capas.
-    - `cine_multiplex/`: Paquete principal de la aplicación.
-    - `main.py`: Punto de entrada de la aplicación.
+- `main.py`: Punto de entrada de la aplicación.
+- `cine_multiplex/`:
+    - `domain/`: Contiene las entidades y la lógica de negocio (Peliculas, Salas, Sesiones, Entradas).
+    - `application/`: Servicios que coordinan las operaciones de la aplicación.
+    - `infrastructure/`: Implementaciones de persistencia (memoria) y datos iniciales.
+    - `presentation/`: Interfaz de usuario por consola (menú).
+
 
 ## Instrucciones para ejecutar el proyecto.
 
-### Fase 1
+## Ejecución
 
-1. Accede a la carpeta del proyecto para la Fase 1:
+Para ejecutar la aplicación, utiliza el siguiente comando desde el directorio `01-diseno_capas`:
 
-```bash
-cd proyecto/01-capas
-```
-
-2. Ejecuta la aplicación:
-
-```bash
+```powershell
 python main.py
-```
-o como módulo:
-```bash
-python -m cine_multiplex.main
 ```
 
 ## Checklists por fases del proyecto
