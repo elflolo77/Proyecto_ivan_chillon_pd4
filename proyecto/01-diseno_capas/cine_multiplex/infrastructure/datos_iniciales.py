@@ -1,8 +1,8 @@
 """Infraestructura: Datos iniciales del sistema."""
 
-from cineflolix.domain.pelicula import PeliculaComercial, PeliculaInfantil, PeliculaClasica
-from cineflolix.domain.sala import Sala
-from cineflolix.infrastructure.repositorio_memoria import RepositorioMemoria
+from cine_multiplex.domain.pelicula import PeliculaComercial, PeliculaInfantil, PeliculaClasica
+from cine_multiplex.domain.sala import Sala
+from cine_multiplex.infrastructure.repositorio_memoria import RepositorioMemoria
 
 def inicializar_repositorio():
     """Crea y devuelve un repositorio con datos precargados."""

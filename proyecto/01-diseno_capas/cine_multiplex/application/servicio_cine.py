@@ -1,9 +1,9 @@
 """Aplicación: Servicio principal de Cine Flolix."""
 
-from cineflolix.domain.pelicula import PeliculaComercial, PeliculaInfantil, PeliculaClasica
-from cineflolix.domain.sala import Sala
-from cineflolix.domain.sesion import Sesion
-from cineflolix.domain.entrada import Entrada
+from cine_multiplex.domain.pelicula import PeliculaComercial, PeliculaInfantil, PeliculaClasica
+from cine_multiplex.domain.sala import Sala
+from cine_multiplex.domain.sesion import Sesion
+from cine_multiplex.domain.entrada import Entrada
 
 class ServicioCine:
     """Coordina las operaciones del cine."""

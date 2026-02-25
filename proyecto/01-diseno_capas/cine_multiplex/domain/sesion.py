@@ -1,7 +1,7 @@
 """Dominio: Entidad Sesion."""
 
-from cineflolix.domain.pelicula import Pelicula
-from cineflolix.domain.sala import Sala
+from cine_multiplex.domain.pelicula import Pelicula
+from cine_multiplex.domain.sala import Sala
 
 class Sesion:
     """Representa la proyección de una película en una sala y horario."""

@@ -1,5 +1,5 @@
 """Infraestructura: Repositorio en memoria."""
-from cineflolix.domain.repositorio import RepositorioCine
+from cine_multiplex.domain.repositorio import RepositorioCine
 
 class RepositorioMemoria(RepositorioCine):
     """Implementación en memoria del repositorio."""

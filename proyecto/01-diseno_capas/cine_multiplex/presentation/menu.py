@@ -1,6 +1,6 @@
- """Presentación: Menú de consola."""
+"""Presentación: Menú de consola."""
 
-from cineflolix.application.servicio_cine import ServicioCine
+from cine_multiplex.application.servicio_cine import ServicioCine
 
 class MenuCine:
     def __init__(self, servicio: ServicioCine):

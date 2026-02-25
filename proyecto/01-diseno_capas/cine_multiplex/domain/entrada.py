@@ -1,7 +1,7 @@
 """Dominio: Entidad Entrada."""
 
 import uuid
-from cineflolix.domain.sesion import Sesion
+from cine_multiplex.domain.sesion import Sesion
 
 class Entrada:
     """Representa una entrada vendida."""

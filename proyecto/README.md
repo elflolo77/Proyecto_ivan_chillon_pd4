@@ -1,25 +1,32 @@
-# Proyecto modelo. Máquina expendedora de refrescos y snacks
+# Proyecto Cine Multiplex
+
+Este proyecto es una aplicación de gestión para un cine multiplex, organizada siguiendo una arquitectura de diseño por capas (domain, application, infrastructure, presentation).
+
+## Estructura del Proyecto
+
+- `proyecto/`: Carpeta principal del proyecto.
+  - `01-capas/`: Código correspondiente a la fase de diseño por capas.
+    - `cine_multiplex/`: Paquete principal de la aplicación.
+    - `main.py`: Punto de entrada de la aplicación.
 
 ## Instrucciones para ejecutar el proyecto.
 
 ### Fase 1
 
-Clonar el repositorio:
+1. Accede a la carpeta del proyecto para la Fase 1:
 
 ```bash
-git clone ssh://git@codeberg.org/ichigar/cepy_pd4.git
+cd proyecto/01-capas
 ```
 
-Accede a la carpeta padre en la que está el paquete del proyecto para la Fase 1
+2. Ejecuta la aplicación:
 
 ```bash
-cd cepy_pd4/proyecto/01-diseno-capas
+python main.py
 ```
-
-Ejecuta la aplicación
-
-```
-python -m expendedora.presentation.menu
+o como módulo:
+```bash
+python -m cine_multiplex.main
 ```
 
 ## Checklists por fases del proyecto
@@ -29,10 +36,10 @@ python -m expendedora.presentation.menu
 - [x] Crear cuenta en Github/codeberg
 - [x] Crear repositorio para alojar/enlazar materiales de clase
 - [x] Compartir repositorio con el usuario del profesor (ichigar)
-- [] Instalar y configurar GIT en ordenador de clase y en ordenador de casa.
+- [x] Instalar y configurar GIT en ordenador de clase y en ordenador de casa.
 - [x] Crear claves ssh en ordenador de casa y en ordenador de clase. Añadir claves públicas a las cuentas de github/codeberg
-- [] Clonar repositorio en clase y en casa
-- [] Probar a hacer cambios en clase y en casa y aprender a mantener actualizados los cambios realizados (clase/casa/repositorio)
+- [x] Clonar repositorio en clase y en casa
+- [x] Probar a hacer cambios en clase y en casa y aprender a mantener actualizados los cambios realizados (clase/casa/repositorio)
 - [x] Crear subcarpeta `proyecto` en repositorio.
 - [x] Incluir en `README.md` con las instrucciones para instalar y ejecutar el proyecto.
 - [x] Crear en `proyecto` subcarpeta `01-capas` e incluir en la misma el código para dicha fase de tu proyecto
