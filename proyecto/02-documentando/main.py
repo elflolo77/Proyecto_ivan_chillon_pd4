@@ -6,13 +6,13 @@ from cine_multiplex.presentation.menu import MenuCine
 
 def main():
     # Inicializar dependencias con datos de prueba
-    repo = inicializar_repositorio()
+    repositorio_cine = inicializar_repositorio()
     
-    servicio = ServicioCine(repo)
-    menu = MenuCine(servicio)
+    servicio_cine = ServicioCine(repositorio_cine)
+    interfaz_menu = MenuCine(servicio_cine)
     
     # Ejecutar aplicación
-    menu.ejecutar()
+    interfaz_menu.ejecutar()
 
 if __name__ == "__main__":
     main()

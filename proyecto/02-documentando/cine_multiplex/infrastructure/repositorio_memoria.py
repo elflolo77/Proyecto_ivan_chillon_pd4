@@ -5,44 +5,44 @@ class RepositorioMemoria(RepositorioCine):
     """Implementación en memoria del repositorio."""
     
     def __init__(self):
-        self.peliculas = {}
-        self.salas = {}
-        self.sesiones = {}
-        self.entradas = []
+        self._coleccion_peliculas = {}
+        self._coleccion_salas = {}
+        self._coleccion_sesiones = {}
+        self._coleccion_entradas = []
 
     # --- Peliculas ---
-    def guardar_pelicula(self, pelicula):
-        self.peliculas[pelicula.titulo] = pelicula
+    def guardar_pelicula(self, nueva_pelicula):
+        self._coleccion_peliculas[nueva_pelicula.titulo] = nueva_pelicula
 
-    def obtener_pelicula(self, titulo):
-        return self.peliculas.get(titulo)
+    def obtener_pelicula_por_titulo(self, nombre_pelicula):
+        return self._coleccion_peliculas.get(nombre_pelicula)
 
-    def listar_peliculas(self):
-        return list(self.peliculas.values())
+    def listar_todas_las_peliculas(self):
+        return list(self._coleccion_peliculas.values())
 
     # --- Salas ---
-    def guardar_sala(self, sala):
-        self.salas[sala.numero] = sala
+    def guardar_sala(self, nueva_sala):
+        self._coleccion_salas[nueva_sala.numero] = nueva_sala
 
-    def obtener_sala(self, numero):
-        return self.salas.get(numero)
+    def obtener_sala_por_numero(self, numero_sala):
+        return self._coleccion_salas.get(numero_sala)
 
-    def listar_salas(self):
-        return list(self.salas.values())
+    def listar_todas_las_salas(self):
+        return list(self._coleccion_salas.values())
 
     # --- Sesiones ---
-    def guardar_sesion(self, sesion):
-        self.sesiones[sesion.id] = sesion
+    def guardar_sesion(self, nueva_sesion):
+        self._coleccion_sesiones[nueva_sesion.id_sesion] = nueva_sesion
 
-    def obtener_sesion(self, id_sesion):
-        return self.sesiones.get(id_sesion)
+    def obtener_sesion_por_id(self, identificador_sesion):
+        return self._coleccion_sesiones.get(identificador_sesion)
 
-    def listar_sesiones(self):
-        return list(self.sesiones.values())
+    def listar_todas_las_sesiones(self):
+        return list(self._coleccion_sesiones.values())
 
     # --- Entradas ---
-    def guardar_entrada(self, entrada):
-        self.entradas.append(entrada)
+    def guardar_entrada(self, nueva_entrada):
+        self._coleccion_entradas.append(nueva_entrada)
 
-    def listar_entradas(self):
-        return self.entradas
+    def listar_todas_las_entradas(self):
+        return self._coleccion_entradas

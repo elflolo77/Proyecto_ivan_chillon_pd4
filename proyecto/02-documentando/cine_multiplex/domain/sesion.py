@@ -6,16 +6,16 @@ from cine_multiplex.domain.sala import Sala
 class Sesion:
     """Representa la proyección de una película en una sala y horario."""
     def __init__(self, id_sesion, pelicula: Pelicula, sala: Sala, fecha_hora):
-        self._id = id_sesion
+        self._id_sesion = id_sesion
         self._pelicula = pelicula
         self._sala = sala
         self._fecha_hora = fecha_hora
-        self._asientos_ocupados = 0
-        self._estado = "programada" # programada, completa, cancelada
+        self._numero_asientos_ocupados = 0
+        self._estado_sesion = "programada" # programada, completa, cancelada
 
     @property
-    def id(self):
-        return self._id
+    def id_sesion(self):
+        return self._id_sesion
 
     @property
     def pelicula(self):
@@ -30,31 +30,31 @@ class Sesion:
         return self._fecha_hora
 
     @property
-    def asientos_ocupados(self):
-        return self._asientos_ocupados
+    def numero_asientos_ocupados(self):
+        return self._numero_asientos_ocupados
 
     @property
-    def capacidad_disponible(self):
-        return self._sala.capacidad - self._asientos_ocupados
+    def numero_asientos_libres(self):
+        return self._sala.capacidad_maxima - self._numero_asientos_ocupados
 
     def vender_entrada(self):
         """Intenta vender una entrada para esta sesión."""
-        if self._estado == "cancelada":
+        if self._estado_sesion == "cancelada":
             raise ValueError("La sesión está cancelada.")
-        if self.capacidad_disponible <= 0:
-            self._estado = "completa"
+        if self.numero_asientos_libres <= 0:
+            self._estado_sesion = "completa"
             raise ValueError("La sesión está completa.")
         
-        self._asientos_ocupados += 1
-        if self.capacidad_disponible == 0:
-            self._estado = "completa"
+        self._numero_asientos_ocupados += 1
+        if self.numero_asientos_libres == 0:
+            self._estado_sesion = "completa"
 
     def anular_entrada(self):
         """Anula una entrada vendida."""
-        if self._asientos_ocupados > 0:
-            self._asientos_ocupados -= 1
-            if self._estado == "completa" and self.capacidad_disponible > 0:
-                self._estado = "programada"
+        if self._numero_asientos_ocupados > 0:
+            self._numero_asientos_ocupados -= 1
+            if self._estado_sesion == "completa" and self.numero_asientos_libres > 0:
+                self._estado_sesion = "programada"
 
     def __str__(self):
-        return f"Sesion {self.id}: {self.pelicula.titulo} en Sala {self.sala.numero} a las {self.fecha_hora}"
+        return f"Sesion {self.id_sesion}: {self.pelicula.titulo} en Sala {self.sala.numero} a las {self.fecha_hora}"

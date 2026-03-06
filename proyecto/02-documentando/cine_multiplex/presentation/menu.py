@@ -3,132 +3,131 @@
 from cine_multiplex.application.servicio_cine import ServicioCine
 
 class MenuCine:
-    def __init__(self, servicio: ServicioCine):
-        self.servicio = servicio
+    def __init__(self, servicio_cine: ServicioCine):
+        self._servicio_cine = servicio_cine
 
     def limpiar_pantalla(self):
         print("\n" * 50)
 
-    def mostrar_menu(self):
+    def mostrar_menu_principal(self):
         print("\n--- CINE FLOLIX ---")
         print("1. Gestión de Películas")
         print("2. Gestión de Salas")
         print("3. Gestión de Sesiones")
         print("4. Venta de Entradas")
-        print("5. Estadísticas")
         print("0. Salir")
 
     def ejecutar(self):
         while True:
-            self.mostrar_menu()
+            self.mostrar_menu_principal()
             opcion = input("Seleccione una opción: ")
 
             if opcion == "1":
-                self.menu_peliculas()
+                self.mostrar_menu_peliculas()
             elif opcion == "2":
-                self.menu_salas()
+                self.mostrar_menu_salas()
             elif opcion == "3":
-                self.menu_sesiones()
+                self.mostrar_menu_sesiones()
             elif opcion == "4":
-                self.menu_ventas()
+                self.mostrar_menu_ventas()
             elif opcion == "5":
-                self.menu_estadisticas()
+                self.mostrar_menu_estadisticas()
             elif opcion == "0":
                 print("¡Hasta luego!")
                 break
             else:
                 print("Opción no válida.")
 
-    def menu_peliculas(self):
+    def mostrar_menu_peliculas(self):
         print("\n--- Películas ---")
         print("1. Listar películas")
         print("2. Registrar Comercial")
         print("3. Registrar Infantil")
         print("4. Registrar Clásica")
-        op = input("Opción: ")
+        opcion_seleccionada = input("Opción: ")
         
-        if op == "1":
+        if opcion_seleccionada == "1":
             try:
-                lista = self.servicio.listar_peliculas()
-                for p in lista:
-                    print(p.mostrar_info())
-            except Exception as e:
-                print(f"Error: {e}")
-        elif op in ["2", "3", "4"]:
+                lista_peliculas = self._servicio_cine.listar_peliculas()
+                for pelicula in lista_peliculas:
+                    print(pelicula.obtener_resumen_pelicula())
+            except Exception as error:
+                print(f"Error: {error}")
+        elif opcion_seleccionada in ["2", "3", "4"]:
             titulo = input("Título: ")
-            duracion = int(input("Duración (min): "))
-            clasif = input("Clasificación: ")
+            duracion_minutos = int(input("Duración (min): "))
+            clasificacion = input("Clasificación: ")
             genero = input("Género: ")
             
             try:
-                if op == "2":
-                    dist = input("Distribuidora: ")
-                    self.servicio.registrar_pelicula_comercial(titulo, duracion, clasif, genero, dist)
-                elif op == "3":
-                    edad = int(input("Edad mínima: "))
-                    self.servicio.registrar_pelicula_infantil(titulo, duracion, clasif, genero, edad)
-                elif op == "4":
-                    anio = int(input("Año estreno: "))
-                    self.servicio.registrar_pelicula_clasica(titulo, duracion, clasif, genero, anio)
+                if opcion_seleccionada == "2":
+                    distribuidora = input("Distribuidora: ")
+                    self._servicio_cine.registrar_pelicula_comercial(titulo, duracion_minutos, clasificacion, genero, distribuidora)
+                elif opcion_seleccionada == "3":
+                    edad_minima = int(input("Edad mínima: "))
+                    self._servicio_cine.registrar_pelicula_infantil(titulo, duracion_minutos, clasificacion, genero, edad_minima)
+                elif opcion_seleccionada == "4":
+                    anio_lanzamiento = int(input("Año estreno: "))
+                    self._servicio_cine.registrar_pelicula_clasica(titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento)
                 print("Película registrada.")
-            except ValueError as e:
-                print(f"Error de validación: {e}")
-            except Exception as e:
-                print(f"Error: {e.args}")
+            except ValueError as error:
+                print(f"Error de validación: {error}")
+            except Exception as error:
+                print(f"Error: {error.args}")
 
-    def menu_salas(self):
+    def mostrar_menu_salas(self):
         print("\n--- Salas ---")
         print("1. Listar salas")
         print("2. Crear sala")
-        op = input("Opción: ")
+        opcion_seleccionada = input("Opción: ")
         
-        if op == "1":
-            for s in self.servicio.listar_salas():
-                print(s)
-        elif op == "2":
+        if opcion_seleccionada == "1":
+            for sala in self._servicio_cine.listar_salas():
+                print(sala)
+        elif opcion_seleccionada == "2":
             try:
-                num = int(input("Número de sala: "))
-                cap = int(input("Capacidad: "))
-                pantalla = input("Tipo de pantalla (2D/3D/IMAX): ")
-                self.servicio.crear_sala(num, cap, pantalla)
+                numero_sala = int(input("Número de sala: "))
+                capacidad_maxima = int(input("Capacidad: "))
+                tecnologia_pantalla = input("Tipo de pantalla (2D/3D/IMAX): ")
+                self._servicio_cine.crear_sala(numero_sala, capacidad_maxima, tecnologia_pantalla)
                 print("Sala creada.")
             except ValueError:
                 print("Datos numéricos inválidos.")
 
-    def menu_sesiones(self):
+    def mostrar_menu_sesiones(self):
         print("\n--- Sesiones ---")
         print("1. Listar sesiones")
         print("2. Programar sesión")
-        op = input("Opción: ")
+        opcion_seleccionada = input("Opción: ")
         
-        if op == "1":
-            for s in self.servicio.listar_sesiones():
-                estado = "LLENA" if s.capacidad_disponible == 0 else f"Libres: {s.capacidad_disponible}"
-                print(f"{s} | {estado}")
-        elif op == "2":
-            id_ses = input("ID Sesión (único): ")
-            pelicula = input("Título Película: ")
-            sala = int(input("Número Sala: "))
-            fecha = input("Fecha (YYYY-MM-DD HH:MM): ")
+        if opcion_seleccionada == "1":
+            for sesion in self._servicio_cine.listar_sesiones():
+                estado_disponibilidad = "LLENA" if sesion.numero_asientos_libres == 0 else f"Libres: {sesion.numero_asientos_libres}"
+                print(f"{sesion} | {estado_disponibilidad}")
+        elif opcion_seleccionada == "2":
+            identificador_sesion = input("ID Sesión (único): ")
+            nombre_pelicula = input("Título Película: ")
+            numero_sala = int(input("Número Sala: "))
+            fecha_hora = input("Fecha (YYYY-MM-DD HH:MM): ")
             try:
-                self.servicio.programar_sesion(id_ses, pelicula, sala, fecha)
+                self._servicio_cine.programar_sesion(identificador_sesion, nombre_pelicula, numero_sala, fecha_hora)
                 print("Sesión programada.")
-            except Exception as e:
-                print(f"Error: {e}")
+            except Exception as error:
+                print(f"Error: {error}")
 
-    def menu_ventas(self):
+    def mostrar_menu_ventas(self):
         print("\n--- Venta de Entradas ---")
-        id_sesion = input("ID de Sesión: ")
+        identificador_sesion = input("ID de Sesión: ")
         print("Tarifas: General, Reducida, Estudiante")
-        tarifa = input("Tipo Tarifa: ")
+        categoria_tarifa = input("Tipo Tarifa: ")
         
         try:
-            entrada = self.servicio.vender_entrada(id_sesion, tarifa)
-            print(f"¡Entrada vendida! ID: {entrada.id} - Precio: ${entrada.tarifa}")
-        except Exception as e:
-            print(f"Error en venta: {e}")
+            entrada = self._servicio_cine.vender_entrada(identificador_sesion, categoria_tarifa)
+            print(f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: ${entrada.precio_euros}")
+        except Exception as error:
+            print(f"Error en venta: {error}")
 
-    def menu_estadisticas(self):
-        stats = self.servicio.informe_ventas()
-        print(f"\nTotal Recaudado: ${stats['total_recaudado']:.2f}")
-        print(f"Entradas Vendidas: {stats['entradas_vendidas']}")
+    def mostrar_menu_estadisticas(self):
+        estadisticas_ventas = self._servicio_cine.informe_ventas()
+        print(f"\nTotal Recaudado: ${estadisticas_ventas['total_recaudado']:.2f}")
+        print(f"Entradas Vendidas: {estadisticas_ventas['entradas_vendidas']}")
