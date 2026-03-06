@@ -2,6 +2,7 @@ class ServicioCine:
     """Servicio principal del cine"""
     
     def __init__(self, lista_peliculas, lista_salas):
+        """Inicializa el servicio con las colecciones base."""
         self._lista_peliculas = lista_peliculas
         self._lista_salas = lista_salas
     

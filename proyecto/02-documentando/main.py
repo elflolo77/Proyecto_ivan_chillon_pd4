@@ -5,6 +5,7 @@ from cine_multiplex.application.servicio_cine import ServicioCine
 from cine_multiplex.presentation.menu import MenuCine
 
 def main():
+    """Arranque de la aplicación y wiring de dependencias."""
     # Inicializar dependencias con datos de prueba
     repositorio_cine = inicializar_repositorio()
     

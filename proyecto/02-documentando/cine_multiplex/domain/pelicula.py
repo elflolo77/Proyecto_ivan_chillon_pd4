@@ -1,65 +1,78 @@
-"""Dominio: Entidades de Película."""
+"""Dominio: Entidades de película."""
 
 class Pelicula:
-    """Clase base para películas."""
-    def __init__(self, titulo, duracion_minutos, clasificacion, genero):
+    """Clase base para representar una película."""
+    def __init__(self, titulo: str, duracion_minutos: int, clasificacion: str, genero: str):
+        """Inicializa una película y valida su estado."""
         self._titulo = titulo
-        self._duracion_minutos = duracion_minutos # en minutos
+        self._duracion_minutos = duracion_minutos # Memoria: minutos (int > 0)
         self._clasificacion = clasificacion
         self._genero = genero
         self._esta_en_cartelera = True
 
     @property
-    def titulo(self):
+    def titulo(self) -> str:
+        """Devuelve el título de la película."""
         return self._titulo
 
     @property
-    def duracion_minutos(self):
+    def duracion_minutos(self) -> int:
+        """Devuelve la duración en minutos."""
         return self._duracion_minutos
 
     @property
-    def clasificacion(self):
+    def clasificacion(self) -> str:
+        """Devuelve la clasificación por edades."""
         return self._clasificacion
     
     @property
-    def genero(self):
+    def genero(self) -> str:
+        """Devuelve el género de la película."""
         return self._genero
 
     @property
-    def esta_en_cartelera(self):
+    def esta_en_cartelera(self) -> bool:
+        """Indica si la película está en cartelera."""
         return self._esta_en_cartelera
 
     @esta_en_cartelera.setter
-    def esta_en_cartelera(self, nuevo_estado_cartelera):
+    def esta_en_cartelera(self, nuevo_estado_cartelera: bool):
+        """Actualiza el estado de disponibilidad."""
         self._esta_en_cartelera = nuevo_estado_cartelera
 
-    def obtener_resumen_pelicula(self):
-        """Devuelve información resumida de la película."""
+    def obtener_resumen_pelicula(self) -> str:
+        """Devuelve resumen textual (implementar en subclases)."""
         raise NotImplementedError
 
 class PeliculaComercial(Pelicula):
-    """Estrenos y películas de gran difusión."""
-    def __init__(self, titulo, duracion, clasificacion, genero, distribuidora):
-        super().__init__(titulo, duracion, clasificacion, genero)
+    """Película de gran difusión comercial."""
+    def __init__(self, titulo: str, duracion_minutos: int, clasificacion: str, genero: str, distribuidora: str):
+        """Inicializa con distribuidora."""
+        super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.distribuidora = distribuidora
 
-    def obtener_resumen_pelicula(self):
+    def obtener_resumen_pelicula(self) -> str:
+        """Resumen especializado para películas comerciales."""
         return f"[COMERCIAL] {self.titulo} ({self.duracion_minutos} min) - {self.genero}"
 
 class PeliculaInfantil(Pelicula):
-    """Películas para público familiar e infantil."""
-    def __init__(self, titulo, duracion_minutos, clasificacion, genero, edad_minima):
+    """Película orientada al público infantil."""
+    def __init__(self, titulo: str, duracion_minutos: int, clasificacion: str, genero: str, edad_minima: int):
+        """Inicializa con edad mínima recomendada."""
         super().__init__(titulo, duracion_minutos, clasificacion, genero)
-        self.edad_minima = edad_minima
+        self.edad_minima = edad_minima # Regla: restricción de edad mínima
 
-    def obtener_resumen_pelicula(self):
+    def obtener_resumen_pelicula(self) -> str:
+        """Resumen especializado para películas infantiles."""
         return f"[INFANTIL] {self.titulo} (Min: {self.edad_minima} años) - {self.genero}"
 
 class PeliculaClasica(Pelicula):
-    """Películas antiguas o reestrenos."""
-    def __init__(self, titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento):
+    """Película considerada un clásico o reestreno."""
+    def __init__(self, titulo: str, duracion_minutos: int, clasificacion: str, genero: str, anio_lanzamiento: int):
+        """Inicializa con año de estreno original."""
         super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.anio_lanzamiento = anio_lanzamiento
 
-    def obtener_resumen_pelicula(self):
+    def obtener_resumen_pelicula(self) -> str:
+        """Resumen especializado para películas clásicas."""
         return f"[CLASICA] {self.titulo} (Año: {self.anio_lanzamiento}) - {self.genero}"

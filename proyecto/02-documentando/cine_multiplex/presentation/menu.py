@@ -3,21 +3,27 @@
 from cine_multiplex.application.servicio_cine import ServicioCine
 
 class MenuCine:
+    """Clase para la interfaz de usuario en consola."""
     def __init__(self, servicio_cine: ServicioCine):
+        """Inicializa el menú con el servicio de cine."""
         self._servicio_cine = servicio_cine
 
     def limpiar_pantalla(self):
+        """Simula limpieza de pantalla."""
         print("\n" * 50)
 
     def mostrar_menu_principal(self):
+        """Visualiza el menú principal."""
         print("\n--- CINE FLOLIX ---")
         print("1. Gestión de Películas")
         print("2. Gestión de Salas")
         print("3. Gestión de Sesiones")
         print("4. Venta de Entradas")
+        print("5. Informe de Ventas")
         print("0. Salir")
 
     def ejecutar(self):
+        """Bucle principal de ejecución."""
         while True:
             self.mostrar_menu_principal()
             opcion = input("Seleccione una opción: ")
@@ -39,6 +45,7 @@ class MenuCine:
                 print("Opción no válida.")
 
     def mostrar_menu_peliculas(self):
+        """Submenú de gestión de películas."""
         print("\n--- Películas ---")
         print("1. Listar películas")
         print("2. Registrar Comercial")
@@ -76,6 +83,8 @@ class MenuCine:
                 print(f"Error: {error.args}")
 
     def mostrar_menu_salas(self):
+        """Submenú de gestión de salas."""
+        # Capa de presentación - Gestión de salas
         print("\n--- Salas ---")
         print("1. Listar salas")
         print("2. Crear sala")
@@ -95,6 +104,7 @@ class MenuCine:
                 print("Datos numéricos inválidos.")
 
     def mostrar_menu_sesiones(self):
+        """Submenú de gestión de sesiones."""
         print("\n--- Sesiones ---")
         print("1. Listar sesiones")
         print("2. Programar sesión")
@@ -116,6 +126,7 @@ class MenuCine:
                 print(f"Error: {error}")
 
     def mostrar_menu_ventas(self):
+        """Submenú de venta de entradas."""
         print("\n--- Venta de Entradas ---")
         identificador_sesion = input("ID de Sesión: ")
         print("Tarifas: General, Reducida, Estudiante")
@@ -128,6 +139,7 @@ class MenuCine:
             print(f"Error en venta: {error}")
 
     def mostrar_menu_estadisticas(self):
+        """Visualiza informe de ventas."""
         estadisticas_ventas = self._servicio_cine.informe_ventas()
         print(f"\nTotal Recaudado: ${estadisticas_ventas['total_recaudado']:.2f}")
         print(f"Entradas Vendidas: {estadisticas_ventas['entradas_vendidas']}")
