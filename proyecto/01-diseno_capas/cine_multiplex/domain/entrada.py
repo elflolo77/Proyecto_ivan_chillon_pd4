@@ -1,6 +1,7 @@
 """Dominio: Entidad Entrada."""
 
 import uuid
+from datetime import datetime
 from cine_multiplex.domain.sesion import Sesion
 
 class Entrada:
@@ -10,7 +11,7 @@ class Entrada:
         self._sesion = sesion
         self._tarifa = tarifa
         self._tipo_tarifa = tipo_tarifa # general, reducida, etc.
-        self._fecha_venta = None # Se podría establecer al momento de creación
+        self._fecha_venta = datetime.now()
 
     @property
     def id(self):

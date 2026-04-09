@@ -46,3 +46,6 @@ class RepositorioMemoria(RepositorioCine):
 
     def listar_entradas(self):
         return self.entradas
+
+    def eliminar_entrada(self, id_entrada):
+        self.entradas = [e for e in self.entradas if e.id != id_entrada]

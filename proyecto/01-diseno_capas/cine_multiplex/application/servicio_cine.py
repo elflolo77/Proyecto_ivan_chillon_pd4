@@ -58,6 +58,10 @@ class ServicioCine:
         # Aquí haremos chequeo simple de hora exacta para MVP, idealmente rango duración
         sesiones_sala = [s for s in self.repo.listar_sesiones() if s.sala.numero == numero_sala]
         
+        for s in sesiones_sala:
+            if s.fecha_hora == fecha_hora_str:
+                raise ValueError(f"Ya existe una sesión en la sala {numero_sala} a las {fecha_hora_str}.")
+        
         sesion = Sesion(id_sesion, pelicula, sala, fecha_hora_str)
         self.repo.guardar_sesion(sesion)
         return sesion
@@ -109,12 +113,9 @@ class ServicioCine:
         if entrada_encontrada:
             sesion = entrada_encontrada.sesion
             sesion.anular_entrada()
-            # Eliminar de la lista de vendidas? O marcarla anulada?
-            # El requisito dice "Anular entradas", la entidad Entrada podría tener estado.
-            # Aquí la eliminamos de la lista para simplificar o dejaría ahí pero necesitamos actualizar repos.
-            self.repo.entradas.remove(entrada_encontrada) # Hack acceso directo para MVP
+            # Eliminar via repositorio
+            self.repo.eliminar_entrada(entrada_encontrada.id)
             self.repo.guardar_sesion(sesion)
-            self.repo.guardar_datos()
             return True
         return False
         

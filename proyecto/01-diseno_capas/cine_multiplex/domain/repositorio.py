@@ -39,3 +39,6 @@ class RepositorioCine:
     
     def listar_entradas(self):
         raise NotImplementedError
+
+    def eliminar_entrada(self, id_entrada):
+        raise NotImplementedError

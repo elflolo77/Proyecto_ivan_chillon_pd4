@@ -56,11 +56,11 @@ class MenuCine:
                 print(f"Error: {e}")
         elif op in ["2", "3", "4"]:
             titulo = input("Título: ")
-            duracion = int(input("Duración (min): "))
-            clasif = input("Clasificación: ")
-            genero = input("Género: ")
             
             try:
+                duracion = int(input("Duración (min): "))
+                clasif = input("Clasificación: ")
+                genero = input("Género: ")
                 if op == "2":
                     dist = input("Distribuidora: ")
                     self.servicio.registrar_pelicula_comercial(titulo, duracion, clasif, genero, dist)
@@ -108,9 +108,9 @@ class MenuCine:
         elif op == "2":
             id_ses = input("ID Sesión (único): ")
             pelicula = input("Título Película: ")
-            sala = int(input("Número Sala: "))
-            fecha = input("Fecha (YYYY-MM-DD HH:MM): ")
             try:
+                sala = int(input("Número Sala: "))
+                fecha = input("Fecha (YYYY-MM-DD HH:MM): ")
                 self.servicio.programar_sesion(id_ses, pelicula, sala, fecha)
                 print("Sesión programada.")
             except Exception as e:
@@ -118,15 +118,30 @@ class MenuCine:
 
     def menu_ventas(self):
         print("\n--- Venta de Entradas ---")
-        id_sesion = input("ID de Sesión: ")
-        print("Tarifas: General, Reducida, Estudiante")
-        tarifa = input("Tipo Tarifa: ")
+        print("1. Vender Entrada")
+        print("2. Anular Entrada")
+        op = input("Opción: ")
         
-        try:
-            entrada = self.servicio.vender_entrada(id_sesion, tarifa)
-            print(f"¡Entrada vendida! ID: {entrada.id} - Precio: ${entrada.tarifa}")
-        except Exception as e:
-            print(f"Error en venta: {e}")
+        if op == "1":
+            id_sesion = input("ID de Sesión: ")
+            print("Tarifas: General, Reducida, Estudiante")
+            tarifa = input("Tipo Tarifa: ")
+            
+            try:
+                entrada = self.servicio.vender_entrada(id_sesion, tarifa)
+                print(f"¡Entrada vendida! ID: {entrada.id} - Precio: ${entrada.tarifa}")
+            except Exception as e:
+                print(f"Error en venta: {e}")
+        elif op == "2":
+            id_entrada = input("ID de Entrada a anular: ")
+            try:
+                exito = self.servicio.anular_entrada(id_entrada)
+                if exito:
+                    print("Entrada anulada correctamente.")
+                else:
+                    print("No se encontró la entrada o no se pudo anular.")
+            except Exception as e:
+                print(f"Error al anular: {e}")
 
     def menu_estadisticas(self):
         stats = self.servicio.informe_ventas()

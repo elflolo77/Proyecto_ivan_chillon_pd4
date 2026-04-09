@@ -14,10 +14,9 @@
 
 ## Instalación
 
-1. Clona el repositorio o descarga los archivos del proyecto.
-2. Abre una terminal y navega hasta el directorio del proyecto:
+1. Abre una terminal y navega hasta el directorio de la fase actual:
    ```powershell
-   cd d:\Users\Pepito\Documents\proyecto\Proyecto_ivan_chillon_pd4\proyecto\01-diseno_capas
+   cd proyecto/01-diseno_capas
    ```
 
 ## Ejecución
