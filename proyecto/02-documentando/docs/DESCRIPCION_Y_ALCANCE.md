@@ -16,4 +16,4 @@
 - Lógica de red (Sin servidor Web).
 - Interface de Usuario visual.
 
-Todo ello asienta las bases mediante una arquitectura pulida capaz de desacoplar y reescalar al siguiente nivel a corto plazo (e.g. Inyección de Bases de Datos SQL / Django / FastAPI) sin necesidad de reescribir reglas de dominio puro.
+La arquitectura separa la lógica de dominio de la persistencia en memoria y mantiene el sistema simple y consistente con el código actual.

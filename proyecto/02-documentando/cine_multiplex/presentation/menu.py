@@ -4,13 +4,9 @@ from cine_multiplex.application.servicio_cine import ServicioCine
 
 class MenuCine:
     """Clase para la interfaz de usuario en consola."""
-    def __init__(self, servicio_cine: ServicioCine):
+    def __init__(self, servicio_cine):
         """Inicializa el menú con el servicio de cine."""
         self._servicio_cine = servicio_cine
-
-    def limpiar_pantalla(self):
-        """Simula limpieza de pantalla."""
-        print("\n" * 50)
 
     def mostrar_menu_principal(self):
         """Visualiza el menú principal."""
@@ -62,11 +58,11 @@ class MenuCine:
                 print(f"Error: {error}")
         elif opcion_seleccionada in ["2", "3", "4"]:
             titulo = input("Título: ")
-            duracion_minutos = int(input("Duración (min): "))
-            clasificacion = input("Clasificación: ")
-            genero = input("Género: ")
-            
             try:
+                duracion_minutos = int(input("Duración (min): "))
+                clasificacion = input("Clasificación: ")
+                genero = input("Género: ")
+
                 if opcion_seleccionada == "2":
                     distribuidora = input("Distribuidora: ")
                     self._servicio_cine.registrar_pelicula_comercial(titulo, duracion_minutos, clasificacion, genero, distribuidora)
@@ -84,7 +80,6 @@ class MenuCine:
 
     def mostrar_menu_salas(self):
         """Submenú de gestión de salas."""
-        # Capa de presentación - Gestión de salas
         print("\n--- Salas ---")
         print("1. Listar salas")
         print("2. Crear sala")
@@ -117,26 +112,44 @@ class MenuCine:
         elif opcion_seleccionada == "2":
             identificador_sesion = input("ID Sesión (único): ")
             nombre_pelicula = input("Título Película: ")
-            numero_sala = int(input("Número Sala: "))
-            fecha_hora = input("Fecha (YYYY-MM-DD HH:MM): ")
             try:
+                numero_sala = int(input("Número Sala: "))
+                fecha_hora = input("Fecha (YYYY-MM-DD HH:MM): ")
                 self._servicio_cine.programar_sesion(identificador_sesion, nombre_pelicula, numero_sala, fecha_hora)
                 print("Sesión programada.")
+            except ValueError:
+                print("Número de sala inválido.")
             except Exception as error:
                 print(f"Error: {error}")
 
     def mostrar_menu_ventas(self):
         """Submenú de venta de entradas."""
         print("\n--- Venta de Entradas ---")
-        identificador_sesion = input("ID de Sesión: ")
-        print("Tarifas: General, Reducida, Estudiante")
-        categoria_tarifa = input("Tipo Tarifa: ")
-        
-        try:
-            entrada = self._servicio_cine.vender_entrada(identificador_sesion, categoria_tarifa)
-            print(f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: ${entrada.precio_euros}")
-        except Exception as error:
-            print(f"Error en venta: {error}")
+        print("1. Vender entrada")
+        print("2. Anular entrada")
+        opcion_seleccionada = input("Opción: ")
+
+        if opcion_seleccionada == "1":
+            identificador_sesion = input("ID de Sesión: ")
+            print("Tarifas: General, Reducida, Estudiante")
+            categoria_tarifa = input("Tipo Tarifa: ")
+            try:
+                entrada = self._servicio_cine.vender_entrada(identificador_sesion, categoria_tarifa)
+                print(f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: ${entrada.precio_euros}")
+            except Exception as error:
+                print(f"Error en venta: {error}")
+        elif opcion_seleccionada == "2":
+            identificador_entrada = input("ID de Entrada: ")
+            try:
+                anulada = self._servicio_cine.anular_entrada(identificador_entrada)
+                if anulada:
+                    print("Entrada anulada correctamente.")
+                else:
+                    print("Entrada no encontrada.")
+            except Exception as error:
+                print(f"Error en anulación: {error}")
+        else:
+            print("Opción no válida.")
 
     def mostrar_menu_estadisticas(self):
         """Visualiza informe de ventas."""

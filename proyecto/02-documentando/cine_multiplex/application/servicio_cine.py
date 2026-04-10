@@ -12,21 +12,26 @@ class ServicioCine:
         """Inicializa el servicio con su repositorio."""
         self._repositorio = repositorio_datos
 
-    # --- Películas ---
     def registrar_pelicula_comercial(self, titulo, duracion_minutos, clasificacion, genero, distribuidora):
         """Registra una película comercial."""
+        if self._repositorio.obtener_pelicula_por_titulo(titulo):
+            raise ValueError(f"La película '{titulo}' ya existe.")
         pelicula = PeliculaComercial(titulo, duracion_minutos, clasificacion, genero, distribuidora)
         self._repositorio.guardar_pelicula(pelicula)
         return pelicula
 
     def registrar_pelicula_infantil(self, titulo, duracion_minutos, clasificacion, genero, edad_minima):
         """Registra una película infantil."""
+        if self._repositorio.obtener_pelicula_por_titulo(titulo):
+            raise ValueError(f"La película '{titulo}' ya existe.")
         pelicula = PeliculaInfantil(titulo, duracion_minutos, clasificacion, genero, edad_minima)
         self._repositorio.guardar_pelicula(pelicula)
         return pelicula
 
     def registrar_pelicula_clasica(self, titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento):
         """Registra una película clásica."""
+        if self._repositorio.obtener_pelicula_por_titulo(titulo):
+            raise ValueError(f"La película '{titulo}' ya existe.")
         pelicula = PeliculaClasica(titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento)
         self._repositorio.guardar_pelicula(pelicula)
         return pelicula
@@ -35,7 +40,6 @@ class ServicioCine:
         """Lista todas las películas."""
         return self._repositorio.listar_todas_las_peliculas()
 
-    # --- Salas ---
     def crear_sala(self, numero_sala, capacidad_maxima, tecnologia_pantalla="2D"):
         """Crea una sala de cine."""
         sala = Sala(numero_sala, capacidad_maxima, tecnologia_pantalla)
@@ -46,7 +50,6 @@ class ServicioCine:
         """Lista todas las salas."""
         return self._repositorio.listar_todas_las_salas()
 
-    # --- Sesiones ---
     def programar_sesion(self, identificador_sesion, nombre_pelicula, numero_sala, fecha_hora_str):
         """Programa una sesión (Formato: 'YYYY-MM-DD HH:MM')."""
         pelicula = self._repositorio.obtener_pelicula_por_titulo(nombre_pelicula)
@@ -60,6 +63,13 @@ class ServicioCine:
         if not isinstance(fecha_hora_str, str):
             raise ValueError("La fecha debe ser una cadena de texto.")
 
+        if self._repositorio.obtener_sesion_por_id(identificador_sesion):
+            raise ValueError(f"ID de sesión '{identificador_sesion}' ya existe.")
+
+        for sesion_existente in self._repositorio.listar_todas_las_sesiones():
+            if sesion_existente.sala.numero == numero_sala and sesion_existente.fecha_hora == fecha_hora_str:
+                raise ValueError(f"Ya existe una sesión en la sala {numero_sala} a las {fecha_hora_str}.")
+
         sesion = Sesion(identificador_sesion, pelicula, sala, fecha_hora_str)
         self._repositorio.guardar_sesion(sesion)
         return sesion
@@ -72,7 +82,6 @@ class ServicioCine:
         """Recupera una sesión por ID."""
         return self._repositorio.obtener_sesion_por_id(identificador_sesion)
 
-    # --- Entradas ---
     def vender_entrada(self, identificador_sesion, categoria_tarifa):
         """Vende una entrada aplicando la política de precios."""
         sesion = self._repositorio.obtener_sesion_por_id(identificador_sesion)
@@ -88,10 +97,8 @@ class ServicioCine:
         }
         precio_venta = tarifas_disponibles.get(categoria_tarifa, PRECIO_BASE_EUROS)
         
-        # Validar capacidad en el dominio
         sesion.vender_entrada()
         
-        # Guardar ticket y actualizar sesión
         entrada = Entrada(sesion, precio_venta, categoria_tarifa)
         self._repositorio.guardar_entrada(entrada)
         self._repositorio.guardar_sesion(sesion)
@@ -100,24 +107,14 @@ class ServicioCine:
 
     def anular_entrada(self, identificador_entrada):
         """Anula una entrada y libera el asiento."""
-        # Búsqueda lineal en el repositorio
-        entradas_vendidas = self._repositorio.listar_todas_las_entradas()
-        entrada_encontrada = None
-        for e in entradas_vendidas:
-            if e.id_entrada == identificador_entrada:
-                entrada_encontrada = e
-                break
-        
+        entrada_encontrada = self._repositorio.eliminar_entrada(identificador_entrada)
         if entrada_encontrada:
             sesion = entrada_encontrada.sesion
             sesion.anular_entrada()
-            # Se elimina la entrada del registro de ventas
-            self._repositorio._coleccion_entradas.remove(entrada_encontrada) 
             self._repositorio.guardar_sesion(sesion)
             return True
         return False
-        
-    # --- Estadísticas ---
+
     def informe_ventas(self):
         """Calcula el total recaudado y entradas vendidas."""
         total_recaudado_euros = sum(e.precio_euros for e in self._repositorio.listar_todas_las_entradas())

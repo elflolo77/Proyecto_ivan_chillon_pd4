@@ -6,13 +6,11 @@ from cine_multiplex.presentation.menu import MenuCine
 
 def main():
     """Arranque de la aplicación y wiring de dependencias."""
-    # Inicializar dependencias con datos de prueba
     repositorio_cine = inicializar_repositorio()
     
     servicio_cine = ServicioCine(repositorio_cine)
     interfaz_menu = MenuCine(servicio_cine)
     
-    # Ejecutar aplicación
     interfaz_menu.ejecutar()
 
 if __name__ == "__main__":

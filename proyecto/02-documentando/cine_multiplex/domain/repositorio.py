@@ -3,7 +3,6 @@
 class RepositorioCine:
     """Interfaz para la persistencia de datos del cine."""
 
-    # --- Películas ---
     def guardar_pelicula(self, nueva_pelicula):
         """Persiste una película en el sistema."""
         raise NotImplementedError
@@ -16,7 +15,6 @@ class RepositorioCine:
         """Recupera todas las películas registradas."""
         raise NotImplementedError
 
-    # --- Salas ---
     def guardar_sala(self, nueva_sala):
         """Persiste una sala de cine."""
         raise NotImplementedError
@@ -29,7 +27,6 @@ class RepositorioCine:
         """Recupera todas las salas configuradas."""
         raise NotImplementedError
 
-    # --- Sesiones ---
     def guardar_sesion(self, nueva_sesion):
         """Persiste una sesión de proyección."""
         raise NotImplementedError
@@ -42,11 +39,14 @@ class RepositorioCine:
         """Recupera todas las sesiones programadas."""
         raise NotImplementedError
 
-    # --- Entradas ---
     def guardar_entrada(self, nueva_entrada):
         """Registra la venta de una entrada."""
         raise NotImplementedError
     
     def listar_todas_las_entradas(self):
         """Recupera el historial de entradas vendidas."""
+        raise NotImplementedError
+
+    def eliminar_entrada(self, identificador_entrada):
+        """Elimina una entrada por su ID."""
         raise NotImplementedError

@@ -32,15 +32,14 @@ Permite listar las películas registradas o registrar un estreno nuevo (Comercia
 - **Salida:** Listado de sesiones incluyendo detalle de Plazas libres. 
 
 ## 4. Venta de Entradas
-Engloba operaciones de Venta directa y Anulación.
 - **Venta de Entrada:**
   - **Precondición:** Existe la sesión.
-  - **Entrada:** ID de sesión, y la cadena referenciando el tipo de Tarifa (General, Reducida, Estudiante).
-  - **Efectos:** Reduce asientos libres de la sesión, genera un ID hash para ticket y registra el mismo en persistencia.
-- **Anular Entrada:**
-  - **Entrada:** Hash / UUID de la Entrada.
-  - **Salida:** Devolución ("Entrada anulada" u error).
-  - **Efectos:** Libera la sesión y destruye el registro de la venta en el repositorio.
+  - **Entrada:** ID de sesión y tipo de tarifa (`General`, `Reducida`, `Estudiante`).
+  - **Efectos:** Reduce asientos libres de la sesión, genera un identificador de entrada y registra la venta en persistencia.
+- **Anulación de Entrada:**
+  - **Precondición:** Existe una entrada con el identificador.
+  - **Entrada:** ID de entrada.
+  - **Efectos:** Libera un asiento en la sesión relacionada y elimina la entrada del historial.
 
 ## 5. Estadísticas
-- **Salida:** Monto total facturado (`float`) y suma incremental del total de entradas vendidas a lo largo de este Runtime.
+- **Salida:** Monto total facturado (`float`) y el total de entradas vendidas durante el runtime.

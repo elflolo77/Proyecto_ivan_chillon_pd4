@@ -11,7 +11,6 @@ class RepositorioMemoria(RepositorioCine):
         self._coleccion_sesiones = {}
         self._coleccion_entradas = []
 
-    # --- Películas ---
     def guardar_pelicula(self, nueva_pelicula):
         """Almacena una película por título."""
         self._coleccion_peliculas[nueva_pelicula.titulo] = nueva_pelicula
@@ -24,7 +23,6 @@ class RepositorioMemoria(RepositorioCine):
         """Lista todas las películas."""
         return list(self._coleccion_peliculas.values())
 
-    # --- Salas ---
     def guardar_sala(self, nueva_sala):
         """Almacena una sala por número."""
         self._coleccion_salas[nueva_sala.numero] = nueva_sala
@@ -37,7 +35,6 @@ class RepositorioMemoria(RepositorioCine):
         """Lista todas las salas."""
         return list(self._coleccion_salas.values())
 
-    # --- Sesiones ---
     def guardar_sesion(self, nueva_sesion):
         """Almacena una sesión por ID."""
         self._coleccion_sesiones[nueva_sesion.id_sesion] = nueva_sesion
@@ -50,7 +47,6 @@ class RepositorioMemoria(RepositorioCine):
         """Lista todas las sesiones."""
         return list(self._coleccion_sesiones.values())
 
-    # --- Entradas ---
     def guardar_entrada(self, nueva_entrada):
         """Añade una entrada al historial."""
         self._coleccion_entradas.append(nueva_entrada)
@@ -58,3 +54,10 @@ class RepositorioMemoria(RepositorioCine):
     def listar_todas_las_entradas(self):
         """Lista todas las ventas."""
         return self._coleccion_entradas
+
+    def eliminar_entrada(self, identificador_entrada):
+        """Elimina una entrada por su identificador."""
+        entrada_a_eliminar = next((entrada for entrada in self._coleccion_entradas if entrada.id_entrada == identificador_entrada), None)
+        if entrada_a_eliminar:
+            self._coleccion_entradas.remove(entrada_a_eliminar)
+        return entrada_a_eliminar

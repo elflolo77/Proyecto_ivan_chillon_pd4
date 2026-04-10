@@ -12,6 +12,6 @@ Lista de situaciones anómalas que un usuario o estudiante en fase de prueba pod
 - **Síntoma:** El programa se cierra de forma severa al intentar `repositorio.peliculas[xxx]`.
 - **Causa/Solución:** Tu versión actual del código está apuntando a variables de infraestructura privada sin respetar el patrón SOLID. Asegúrate (en especial tras el refactor) de usar _sólo el contrato_: `self._repositorio.obtener_pelicula(xxx)` en lugar del acceso abusivo a diccionarios.
 
-### Sesión Duplicada fallando
-- **Síntoma / No Bug:** En consola se imprime _"Error en venta" o "Ya existe un caso"_ en vez de reventar todo.
-- **Solución:** ¡Es un comportamiento funcional derivado del Capturador diseñado en `servicio_cine`!. Si metes otra peli a la misma hora literal en la misma sala, la regla de negocio lo intercepta. Todo está funcionando bien.
+### Sesión duplicada
+- **Síntoma:** Aparece un mensaje de error al intentar programar una sesión en la misma sala y hora que otra ya existente.
+- **Causa/Solución:** El sistema impide crear dos sesiones con la misma sala y fecha/hora exactas. Revisa los datos de sala y hora antes de volver a programar.

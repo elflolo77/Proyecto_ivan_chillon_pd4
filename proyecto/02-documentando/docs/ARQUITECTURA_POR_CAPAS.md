@@ -1,7 +1,7 @@
 # ARQUITECTURA POR CAPAS
 
 ## Descripción
-Cine Flolix está estructurado utilizando el patrón de Diseño Arquitectónico de Software por Capas (N-Tier Architecture), específicamente la variante de **Onion Architecture / Clean Architecture** adaptada a un caso sencillo. El objetivo es aislar la lógica de dominio del resto del sistema.
+Cine Flolix está estructurado utilizando el patrón de Diseño Arquitectónico de Software por Capas (N-Tier Architecture). Esta es una arquitectura en capas simple que busca aislar la lógica de dominio del resto del sistema.
 
 ## Capas
 
