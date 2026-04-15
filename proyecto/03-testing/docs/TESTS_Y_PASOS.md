@@ -1,6 +1,39 @@
 # PRUEBAS Y SIGUIENTES PASOS
 
-## Cómo probar la aplicación a mano
+## Pruebas Automatizadas (Fase 03)
+
+Se han implementado pruebas unitarias para las clases principales del dominio para asegurar que las reglas de negocio se cumplen y el estado de los objetos es consistente.
+
+### Cómo ejecutar los tests
+Desde la raíz del proyecto:
+```powershell
+python -m unittest discover cine_multiplex/tests
+```
+
+### Clases Cubiertas
+- **Pelicula** (y sus especializaciones): Se valida la creación, los metadatos y el cambio de estado en cartelera.
+- **Sala**: Se valida la correcta inicialización y la representación textual.
+
+## Reporte de Cobertura
+
+La cobertura de código nos permite identificar qué partes de nuestro software están siendo validadas por las pruebas automáticas.
+
+### Ejecución de Cobertura
+```powershell
+coverage run -m unittest discover cine_multiplex/tests
+coverage report
+```
+
+### Resultados Obtenidos
+| Módulo | Cobertura |
+| :--- | :--- |
+| `cine_multiplex/domain/pelicula.py` | 98% |
+| `cine_multiplex/domain/sala.py` | 100% |
+| **Media Total** | **~98%** |
+
+---
+
+## Cómo probar la aplicación a mano (Legacy)
 
 Sigue estos pasos para comprobar que todo funciona correctamente:
 
