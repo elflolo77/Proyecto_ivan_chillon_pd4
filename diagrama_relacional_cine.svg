@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" width="1400" height="800">
+  <defs>
+    <style>
+      .table-box { fill: #ffffff; stroke: #333; stroke-width: 2; }
+      .table-header { fill: #2c3e50; }
+      .pk-row { fill: #fff9e6; stroke: #ddd; stroke-width: 1; }
+      .fk-row { fill: #ffe6e6; stroke: #ddd; stroke-width: 1; }
+      .normal-row { fill: #f8f8f8; stroke: #ddd; stroke-width: 1; }
+      .optional-row { fill: #eaf4ff; stroke: #ddd; stroke-width: 1; }
+      .text-white { fill: white; font-weight: bold; font-size: 14px; }
+      .text-black { fill: black; font-size: 12px; font-family: 'Monaco', monospace; }
+      .text-label { fill: black; font-size: 12px; font-family: Arial; }
+      .rel-line { stroke: #3498db; stroke-width: 2.5; fill: none; }
+      .rel-label { fill: #2c3e50; font-size: 11px; font-weight: bold; background: white; }
+      .legend-label { fill: black; font-size: 12px; }
+    </style>
+    <marker id="arrow-end" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#3498db"/>
+    </marker>
+  </defs>
+
+  <!-- Título -->
+  <text x="700" y="35" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Cine Multiplex - Diagrama Relacional SQLite
+  </text>
+
+  <!-- ===== TABLA: PELICULAS ===== -->
+  <rect x="40" y="80" width="380" height="40" class="table-header"/>
+  <text x="230" y="108" text-anchor="middle" class="text-white">peliculas</text>
+
+  <rect x="40" y="120" width="380" height="30" class="pk-row"/>
+  <text x="50" y="141" class="text-black">* titulo TEXT PRIMARY KEY</text>
+
+  <rect x="40" y="150" width="380" height="30" class="normal-row"/>
+  <text x="50" y="171" class="text-black">duracion_minutos INTEGER NOT NULL</text>
+
+  <rect x="40" y="180" width="380" height="30" class="normal-row"/>
+  <text x="50" y="201" class="text-black">clasificacion TEXT NOT NULL</text>
+
+  <rect x="40" y="210" width="380" height="30" class="normal-row"/>
+  <text x="50" y="231" class="text-black">genero TEXT NOT NULL</text>
+
+  <rect x="40" y="240" width="380" height="30" class="normal-row"/>
+  <text x="50" y="261" class="text-black">esta_en_cartelera INTEGER NOT NULL</text>
+
+  <rect x="40" y="270" width="380" height="30" class="normal-row"/>
+  <text x="50" y="291" class="text-black">tipo_pelicula TEXT NOT NULL (discriminador)</text>
+
+  <rect x="40" y="300" width="380" height="30" class="optional-row"/>
+  <text x="50" y="321" class="text-black">distribuidora TEXT (solo COMERCIAL)</text>
+
+  <rect x="40" y="330" width="380" height="30" class="optional-row"/>
+  <text x="50" y="351" class="text-black">edad_minima INTEGER (solo INFANTIL)</text>
+
+  <rect x="40" y="360" width="380" height="30" class="optional-row"/>
+  <text x="50" y="381" class="text-black">anio_lanzamiento INTEGER (solo CLASICA)</text>
+
+  <!-- ===== TABLA: SALAS ===== -->
+  <rect x="1000" y="80" width="350" height="40" class="table-header"/>
+  <text x="1175" y="108" text-anchor="middle" class="text-white">salas</text>
+
+  <rect x="1000" y="120" width="350" height="30" class="pk-row"/>
+  <text x="1010" y="141" class="text-black">* numero INTEGER PRIMARY KEY</text>
+
+  <rect x="1000" y="150" width="350" height="30" class="normal-row"/>
+  <text x="1010" y="171" class="text-black">capacidad_maxima INTEGER NOT NULL</text>
+
+  <rect x="1000" y="180" width="350" height="30" class="normal-row"/>
+  <text x="1010" y="201" class="text-black">tecnologia_pantalla TEXT NOT NULL</text>
+
+  <!-- ===== TABLA: SESIONES ===== -->
+  <rect x="500" y="460" width="420" height="40" class="table-header"/>
+  <text x="710" y="488" text-anchor="middle" class="text-white">sesiones</text>
+
+  <rect x="500" y="500" width="420" height="30" class="pk-row"/>
+  <text x="510" y="521" class="text-black">* id_sesion TEXT PRIMARY KEY</text>
+
+  <rect x="500" y="530" width="420" height="30" class="fk-row"/>
+  <text x="510" y="551" class="text-black">pelicula_titulo TEXT (FK -&gt; peliculas)</text>
+
+  <rect x="500" y="560" width="420" height="30" class="fk-row"/>
+  <text x="510" y="581" class="text-black">sala_numero INTEGER (FK -&gt; salas)</text>
+
+  <rect x="500" y="590" width="420" height="30" class="normal-row"/>
+  <text x="510" y="611" class="text-black">fecha_hora TEXT NOT NULL</text>
+
+  <rect x="500" y="620" width="420" height="30" class="normal-row"/>
+  <text x="510" y="641" class="text-black">numero_asientos_ocupados INTEGER NOT NULL</text>
+
+  <rect x="500" y="650" width="420" height="30" class="normal-row"/>
+  <text x="510" y="671" class="text-black">estado_sesion TEXT NOT NULL</text>
+
+  <!-- ===== TABLA: ENTRADAS ===== -->
+  <rect x="40" y="540" width="380" height="40" class="table-header"/>
+  <text x="230" y="568" text-anchor="middle" class="text-white">entradas</text>
+
+  <rect x="40" y="580" width="380" height="30" class="pk-row"/>
+  <text x="50" y="601" class="text-black">* id_entrada TEXT PRIMARY KEY</text>
+
+  <rect x="40" y="610" width="380" height="30" class="fk-row"/>
+  <text x="50" y="631" class="text-black">sesion_id TEXT (FK -&gt; sesiones)</text>
+
+  <rect x="40" y="640" width="380" height="30" class="normal-row"/>
+  <text x="50" y="661" class="text-black">precio_euros REAL NOT NULL</text>
+
+  <rect x="40" y="670" width="380" height="30" class="normal-row"/>
+  <text x="50" y="691" class="text-black">categoria_tarifa TEXT NOT NULL</text>
+
+  <rect x="40" y="700" width="380" height="30" class="normal-row"/>
+  <text x="50" y="721" class="text-black">fecha_venta TEXT NOT NULL</text>
+
+  <!-- ===== RELACIONES (FLECHAS) ===== -->
+
+  <!-- Peliculas -> Sesiones (pelicula_titulo) -->
+  <path d="M 230 390 Q 230 440 605 500" class="rel-line" marker-end="url(#arrow-end)"/>
+  <text x="335" y="445" text-anchor="middle" class="rel-label">1:N</text>
+
+  <!-- Salas -> Sesiones (sala_numero) -->
+  <path d="M 1175 210 Q 1175 400 820 530" class="rel-line" marker-end="url(#arrow-end)"/>
+  <text x="1050" y="400" text-anchor="middle" class="rel-label">1:N</text>
+
+  <!-- Sesiones -> Entradas (sesion_id) -->
+  <path d="M 500 600 Q 460 610 420 620" class="rel-line" marker-end="url(#arrow-end)"/>
+  <text x="460" y="600" text-anchor="middle" class="rel-label">1:N</text>
+
+  <!-- ===== LEYENDA ===== -->
+  <rect x="40" y="745" width="1310" height="45" fill="#f0f0f0" stroke="#999" stroke-width="1" rx="5"/>
+
+  <rect x="60" y="755" width="18" height="18" class="pk-row" stroke="#333" stroke-width="1"/>
+  <text x="85" y="769" class="legend-label">* PK (identifica fila)</text>
+
+  <rect x="260" y="755" width="18" height="18" class="fk-row" stroke="#333" stroke-width="1"/>
+  <text x="285" y="769" class="legend-label">FK (vincula a otra tabla)</text>
+
+  <rect x="520" y="755" width="18" height="18" class="optional-row" stroke="#333" stroke-width="1"/>
+  <text x="545" y="769" class="legend-label">Columna opcional (NULL en subtipos que no la usan)</text>
+
+  <text x="1030" y="769" class="legend-label">1:N = Una a muchos (clave foránea directa)</text>
+</svg>
