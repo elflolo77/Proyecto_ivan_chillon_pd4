@@ -184,7 +184,7 @@ def obtener_sala(self, numero_sala):
 
 ---
 
-## Puntos de atención específicos
+## Advertencias específicos
 
 ### Herencia Pelicula → Comercial / Infantil / Clásica
 
