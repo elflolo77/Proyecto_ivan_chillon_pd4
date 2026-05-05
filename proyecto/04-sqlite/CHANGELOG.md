@@ -9,6 +9,22 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
+## [0.4.0] - 2026-05-05 (Fase 04: persistencia SQLite)
+
+Versión disponible en la subcarpeta `04-sqlite`
+
+### Added
+- Script `crear_bd.py` para crear el esquema de la base de datos e insertar datos iniciales.
+- Implementación de `RepositorioSQLite` que persiste entidades (Películas, Salas, Sesiones, Entradas).
+- Excepciones de dominio en `infrastructure/errores.py`.
+- Documentación de BD (`docs/DISEÑO_BD.md`) y contrato de excepciones (`docs/CONTRATO_EXCEPCIONES.md`).
+- Tests específicos para el repositorio SQLite (`tests/test_repositorio_sqlite.py`).
+
+### Changed
+- El menú de consola ahora utiliza `RepositorioSQLite` de manera exclusiva y maneja excepciones de dominio.
+- `RepositorioMemoria` actualizado para lanzar las mismas excepciones de dominio que el de SQLite.
+
+---
 ## [0.3.0] - 2026-04-15 (Fase 03: testing)
 
 Versión disponible en la subcarpeta `03-testing`

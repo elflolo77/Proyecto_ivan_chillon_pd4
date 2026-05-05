@@ -169,16 +169,16 @@ coverage run -m unittest discover cine_multiplex/tests; coverage report
 
 ### Documentación
 
-- [ ] Actualizar `CHANGELOG.md` (versión `0.4.0`) con los cambios principales
-- [ ] Actualizar `README.md` con instrucciones de cómo ejecutar el script de inicialización
-- [ ] Documentar el diseño de la BD en `docs/DISEÑO_BD.md`:
+- [x] Actualizar `CHANGELOG.md` (versión `0.4.0`) con los cambios principales
+- [x] Actualizar `README.md` con instrucciones de cómo ejecutar el script de inicialización
+- [x] Documentar el diseño de la BD en `docs/DISEÑO_BD.md`:
 - [ ] (*opcional*) Documentar el contrato de excepciones en `docs/CONTRATO_EXCEPCIONES.md`:
 
 ### Verificación final
 
-- [ ] La aplicación funciona igual desde el punto de vista del usuario (mismo menú, mismas operaciones)
-- [ ] Los datos persisten entre ejecuciones (cierra y reabre la app, verifica que los datos están)
-- [ ] Los tests pasan todos sin cambios de lógica de dominio
+- [x]a aplicación funciona igual desde el punto de vista del usuario (mismo menú, mismas operaciones)
+- [x]Los datos persisten entre ejecuciones (cierra y reabre la app, verifica que los datos están)
+- [x] Los tests pasan todos sin cambios de lógica de dominio
 
 </details>
 

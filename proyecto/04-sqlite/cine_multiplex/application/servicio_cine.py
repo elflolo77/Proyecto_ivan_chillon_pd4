@@ -4,6 +4,7 @@ from cine_multiplex.domain.pelicula import PeliculaComercial, PeliculaInfantil, 
 from cine_multiplex.domain.sala import Sala
 from cine_multiplex.domain.sesion import Sesion
 from cine_multiplex.domain.entrada import Entrada
+from cine_multiplex.infrastructure.errores import EntidadNoEncontradaError, EntidadDuplicadaError
 
 class ServicioCine:
     """Coordina las operaciones del cine."""
@@ -15,7 +16,7 @@ class ServicioCine:
     def registrar_pelicula_comercial(self, titulo, duracion_minutos, clasificacion, genero, distribuidora):
         """Registra una película comercial."""
         if self._repositorio.obtener_pelicula_por_titulo(titulo):
-            raise ValueError(f"La película '{titulo}' ya existe.")
+            raise EntidadDuplicadaError(f"La película '{titulo}' ya existe.")
         pelicula = PeliculaComercial(titulo, duracion_minutos, clasificacion, genero, distribuidora)
         self._repositorio.guardar_pelicula(pelicula)
         return pelicula
@@ -23,7 +24,7 @@ class ServicioCine:
     def registrar_pelicula_infantil(self, titulo, duracion_minutos, clasificacion, genero, edad_minima):
         """Registra una película infantil."""
         if self._repositorio.obtener_pelicula_por_titulo(titulo):
-            raise ValueError(f"La película '{titulo}' ya existe.")
+            raise EntidadDuplicadaError(f"La película '{titulo}' ya existe.")
         pelicula = PeliculaInfantil(titulo, duracion_minutos, clasificacion, genero, edad_minima)
         self._repositorio.guardar_pelicula(pelicula)
         return pelicula
@@ -31,7 +32,7 @@ class ServicioCine:
     def registrar_pelicula_clasica(self, titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento):
         """Registra una película clásica."""
         if self._repositorio.obtener_pelicula_por_titulo(titulo):
-            raise ValueError(f"La película '{titulo}' ya existe.")
+            raise EntidadDuplicadaError(f"La película '{titulo}' ya existe.")
         pelicula = PeliculaClasica(titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento)
         self._repositorio.guardar_pelicula(pelicula)
         return pelicula
@@ -56,19 +57,19 @@ class ServicioCine:
         sala = self._repositorio.obtener_sala_por_numero(numero_sala)
         
         if not pelicula:
-            raise ValueError(f"Película '{nombre_pelicula}' no encontrada.")
+            raise EntidadNoEncontradaError(f"Película '{nombre_pelicula}' no encontrada.")
         if not sala:
-            raise ValueError(f"Sala {numero_sala} no encontrada.")
+            raise EntidadNoEncontradaError(f"Sala {numero_sala} no encontrada.")
             
         if not isinstance(fecha_hora_str, str):
             raise ValueError("La fecha debe ser una cadena de texto.")
 
         if self._repositorio.obtener_sesion_por_id(identificador_sesion):
-            raise ValueError(f"ID de sesión '{identificador_sesion}' ya existe.")
+            raise EntidadDuplicadaError(f"ID de sesión '{identificador_sesion}' ya existe.")
 
         for sesion_existente in self._repositorio.listar_todas_las_sesiones():
             if sesion_existente.sala.numero == numero_sala and sesion_existente.fecha_hora == fecha_hora_str:
-                raise ValueError(f"Ya existe una sesión en la sala {numero_sala} a las {fecha_hora_str}.")
+                raise EntidadDuplicadaError(f"Ya existe una sesión en la sala {numero_sala} a las {fecha_hora_str}.")
 
         sesion = Sesion(identificador_sesion, pelicula, sala, fecha_hora_str)
         self._repositorio.guardar_sesion(sesion)
@@ -86,7 +87,7 @@ class ServicioCine:
         """Vende una entrada aplicando la política de precios."""
         sesion = self._repositorio.obtener_sesion_por_id(identificador_sesion)
         if not sesion:
-            raise ValueError("Sesión no encontrada.")
+            raise EntidadNoEncontradaError("Sesión no encontrada.")
             
         # Regla de negocio: precios según categoría
         PRECIO_BASE_EUROS = 10.0
