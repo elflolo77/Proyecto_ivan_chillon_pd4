@@ -1,5 +1,6 @@
 """Infraestructura: Repositorio en memoria."""
 from cine_multiplex.domain.repositorio import RepositorioCine
+from cine_multiplex.infrastructure.errores import EntidadNoEncontradaError, EntidadDuplicadaError
 
 class RepositorioMemoria(RepositorioCine):
     """Implementación en memoria del repositorio."""
@@ -49,6 +50,9 @@ class RepositorioMemoria(RepositorioCine):
 
     def guardar_entrada(self, nueva_entrada):
         """Añade una entrada al historial."""
+        # Check if already exists to match domain exception expectation if any
+        if any(e.id_entrada == nueva_entrada.id_entrada for e in self._coleccion_entradas):
+            raise EntidadDuplicadaError(f"La entrada {nueva_entrada.id_entrada} ya existe.")
         self._coleccion_entradas.append(nueva_entrada)
 
     def listar_todas_las_entradas(self):

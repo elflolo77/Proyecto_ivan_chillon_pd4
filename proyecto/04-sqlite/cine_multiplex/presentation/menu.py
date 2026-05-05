@@ -1,7 +1,12 @@
 """Presentación: Menú de consola."""
 
 from cine_multiplex.application.servicio_cine import ServicioCine
-
+from cine_multiplex.infrastructure.errores import (
+    EntidadNoEncontradaError,
+    EntidadDuplicadaError,
+    ErrorIntegridadDatos,
+    ErrorPersistencia
+)
 class MenuCine:
     """Clase para la interfaz de usuario en consola."""
     def __init__(self, servicio_cine):
@@ -54,8 +59,10 @@ class MenuCine:
                 lista_peliculas = self._servicio_cine.listar_peliculas()
                 for pelicula in lista_peliculas:
                     print(pelicula.obtener_resumen_pelicula())
+            except ErrorPersistencia as error:
+                print(f"Error de base de datos: {error}")
             except Exception as error:
-                print(f"Error: {error}")
+                print(f"Error inesperado: {error}")
         elif opcion_seleccionada in ["2", "3", "4"]:
             titulo = input("Título: ")
             try:
@@ -75,8 +82,12 @@ class MenuCine:
                 print("Película registrada.")
             except ValueError as error:
                 print(f"Error de validación: {error}")
+            except EntidadDuplicadaError as error:
+                print(f"Error: La película ya está registrada. ({error})")
+            except ErrorPersistencia as error:
+                print(f"Error de persistencia: {error}")
             except Exception as error:
-                print(f"Error: {error.args}")
+                print(f"Error inesperado: {error}")
 
     def mostrar_menu_salas(self):
         """Submenú de gestión de salas."""
@@ -97,6 +108,12 @@ class MenuCine:
                 print("Sala creada.")
             except ValueError:
                 print("Datos numéricos inválidos.")
+            except EntidadDuplicadaError as error:
+                print(f"Error: La sala ya existe. ({error})")
+            except ErrorPersistencia as error:
+                print(f"Error de persistencia: {error}")
+            except Exception as error:
+                print(f"Error inesperado: {error}")
 
     def mostrar_menu_sesiones(self):
         """Submenú de gestión de sesiones."""
@@ -119,8 +136,16 @@ class MenuCine:
                 print("Sesión programada.")
             except ValueError:
                 print("Número de sala inválido.")
+            except EntidadDuplicadaError as error:
+                print(f"Error: La sesión ya existe. ({error})")
+            except EntidadNoEncontradaError as error:
+                print(f"Error: Película o Sala no encontrada. ({error})")
+            except ErrorIntegridadDatos as error:
+                print(f"Error de integridad: {error}")
+            except ErrorPersistencia as error:
+                print(f"Error de persistencia: {error}")
             except Exception as error:
-                print(f"Error: {error}")
+                print(f"Error inesperado: {error}")
 
     def mostrar_menu_ventas(self):
         """Submenú de venta de entradas."""
@@ -136,8 +161,14 @@ class MenuCine:
             try:
                 entrada = self._servicio_cine.vender_entrada(identificador_sesion, categoria_tarifa)
                 print(f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: ${entrada.precio_euros}")
+            except EntidadNoEncontradaError as error:
+                print(f"Error: No se encontró la sesión. ({error})")
+            except ValueError as error:
+                print(f"Error de validación: {error}")
+            except ErrorPersistencia as error:
+                print(f"Error de persistencia: {error}")
             except Exception as error:
-                print(f"Error en venta: {error}")
+                print(f"Error inesperado: {error}")
         elif opcion_seleccionada == "2":
             identificador_entrada = input("ID de Entrada: ")
             try:
@@ -146,8 +177,10 @@ class MenuCine:
                     print("Entrada anulada correctamente.")
                 else:
                     print("Entrada no encontrada.")
+            except ErrorPersistencia as error:
+                print(f"Error de persistencia: {error}")
             except Exception as error:
-                print(f"Error en anulación: {error}")
+                print(f"Error inesperado en anulación: {error}")
         else:
             print("Opción no válida.")
 
