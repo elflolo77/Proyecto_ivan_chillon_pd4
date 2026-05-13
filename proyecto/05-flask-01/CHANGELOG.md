@@ -9,6 +9,21 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
+## [0.5.0] - 2026-05-13 (Fase 05: Flask Web Application)
+
+Versión disponible en la subcarpeta `05-flask-01`
+
+### Added
+- Nueva aplicación web con Flask en `presentation/app.py`.
+- Rutas expuestas para consultar y modificar entidades del dominio (Películas, Salas, Sesiones, Entradas, Informes).
+- Redireccionamiento con patrón PRG (Post/Actúa -> Redirect -> Get) en rutas de acción.
+- Captura de excepciones de dominio en cada ruta, traduciéndolas a códigos de estado HTTP pertinentes (404, 400, 409, 500).
+
+### Changed
+- Actualización de `requirements.txt` añadiendo la dependencia `flask`.
+- Actualización de `README.md` y `docs/EJECUCION.md` con las instrucciones para arrancar Flask.
+
+---
 ## [0.4.0] - 2026-05-05 (Fase 04: persistencia SQLite)
 
 Versión disponible en la subcarpeta `04-sqlite`

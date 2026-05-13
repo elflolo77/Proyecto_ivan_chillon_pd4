@@ -74,6 +74,24 @@ python -m unittest discover cine_multiplex/tests
 coverage run -m unittest discover cine_multiplex/tests; coverage report
 ```
 
+### Ejecución Fase 05 (Flask Web App)
+
+1. Abre tu terminal en la raíz de la fase actual:
+```powershell
+cd proyecto/05-flask-01
+```
+
+2. Instala dependencias necesarias:
+```powershell
+pip install -r requirements.txt
+```
+
+3. Ejecuta la aplicación Flask:
+```powershell
+python -m cine_multiplex.presentation.app
+```
+La aplicación web quedará expuesta en `http://127.0.0.1:5000/`.
+
 <details>
   <summary>Fase 03 - testing</summary>
 
@@ -150,3 +168,23 @@ coverage run -m unittest discover cine_multiplex/tests; coverage report
 - [x]a aplicación funciona igual desde el punto de vista del usuario (mismo menú, mismas operaciones)
 - [x]Los datos persisten entre ejecuciones (cierra y reabre la app, verifica que los datos están)
 - [x] Los tests pasan todos sin cambios de lógica de dominio
+</details>
+
+# FASE 05: Flask Web Application
+
+## Checklist para esta fase
+[x] Carpeta 05-flask-01/ creada con el contenido de 04-sqlite/ como base.
+[x] requirements.txt incluye flask.
+[x] presentation/app.py ejecutable con python -m {paquete}.presentation.app.
+[x] Route / con mensaje de bienvenida y enlaces a las rutas principales.
+[x] Todas las operaciones del menú de consola expuestas como routes, incluyendo:
+Consultas (listados, detalles por identificador, búsquedas).
+Acciones que modifican datos (altas, bajas, ediciones, reposiciones, reservas, cambios de estado…). Más adelante se ajustarán para usar POST al ver los formularios.
+Operaciones transaccionales o con estado intermedio (selecciones previas a una compra, confirmaciones, etc.), modeladas como la máquina de estados del lab a2. Solo se puede dejar alguna ruta fuera si no tiene sentido sin elementos que todavía no se han visto (por ejemplo, operaciones que requieren autenticación de usuarios o subida de ficheros).
+[x] Los routes usan <codigo>, <int:id>, <float:precio>… para los parámetros tipados.
+[x] Los routes que modifican datos redirigen con redirect(url_for(...)) tras la acción (patrón "actúa → redirige").
+[x] Todas las excepciones de dominio capturadas en menu.py están también capturadas en los routes correspondientes con el código HTTP apropiado (404 para "no encontrado", 409 para conflicto de estado como duplicado, 400 para datos inválidos).
+[x] En generar se siguen las indicaciones del documento  UAE1_GUIA_FLASK.md añadido al repositorio por el profesor.
+[x] presentation/menu.py sigue funcionando sin cambios.
+[x] CHANGELOG.md con entrada nueva.
+[x] README.md y docs/EJECUCION.md actualizados con el comando de arranque y las rutas expuestas.

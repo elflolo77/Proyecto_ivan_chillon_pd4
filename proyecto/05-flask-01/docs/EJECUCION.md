@@ -57,3 +57,46 @@ python -m unittest discover cine_multiplex/tests
 coverage run -m unittest discover cine_multiplex/tests
 coverage report
 ```
+
+---
+
+## ACTUALIZACIÓN - 2026-05-13 (Fase 05: Flask Web Application)
+
+Para esta fase, la aplicación se puede servir mediante una interfaz web utilizando Flask.
+
+### Requisitos adicionales
+- **Dependencias**: Se requiere el paquete `flask`. Asegúrate de instalarlo usando el `requirements.txt`:
+  ```powershell
+  pip install -r requirements.txt
+  ```
+
+### Ejecución en Fase 05
+Ubica tu terminal en la raíz de la fase actual:
+```powershell
+cd proyecto/05-flask-01
+```
+
+**Ejecutar la aplicación web:**
+```powershell
+python -m cine_multiplex.presentation.app
+```
+La aplicación web quedará expuesta en `http://127.0.0.1:5000/`.
+
+**Rutas expuestas:**
+- `/`: Inicio y enlaces rápidos.
+- `/peliculas`: Listado de películas.
+- `/peliculas/registrar_comercial/...`: Registrar película comercial.
+- `/peliculas/registrar_infantil/...`: Registrar película infantil.
+- `/peliculas/registrar_clasica/...`: Registrar película clásica.
+- `/salas`: Listado de salas.
+- `/salas/crear/...`: Crear sala.
+- `/sesiones`: Listado de sesiones.
+- `/sesiones/programar/...`: Programar sesión.
+- `/entradas/vender/...`: Vender entrada.
+- `/entradas/anular/...`: Anular entrada.
+- `/informe`: Resumen de ventas.
+
+**Ejecutar el menú por consola (retrocompatibilidad):**
+```powershell
+python main.py
+```
