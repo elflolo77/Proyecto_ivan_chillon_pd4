@@ -1,0 +1,2 @@
+# Requirements for Cine Multiplex
+coverage
