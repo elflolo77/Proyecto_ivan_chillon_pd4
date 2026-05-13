@@ -72,6 +72,7 @@ def registrar_pelicula_clasica(titulo, duracion, clasificacion, genero, anio):
         return str(e), 400
     except ErrorPersistencia as e:
         return str(e), 500
+    
 
 # Salas
 @app.route('/salas')

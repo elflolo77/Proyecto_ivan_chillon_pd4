@@ -81,3 +81,4 @@ Versión disponible en la subcarpeta `01-diseno_capas`
   - Entidades y reglas de negocio en `domain/` (items, descuentos, compra/cancelación, stock).
   - Repositorio en memoria y datos iniciales en `infrastructure/`.
 - Tests `test_*.py` para validar el comportamiento principal por pasos.
+

@@ -188,3 +188,4 @@ Operaciones transaccionales o con estado intermedio (selecciones previas a una c
 [x] presentation/menu.py sigue funcionando sin cambios.
 [x] CHANGELOG.md con entrada nueva.
 [x] README.md y docs/EJECUCION.md actualizados con el comando de arranque y las rutas expuestas.
+
