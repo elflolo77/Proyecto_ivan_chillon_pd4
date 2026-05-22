@@ -49,6 +49,7 @@ python main.py
 - [x] `docs/TROUBLESHOOTING.md`
 </details>
 
+
 # FASE III. TESTING
 ## Instrucciones
 
@@ -290,6 +291,53 @@ python -m unittest discover cine_multiplex/tests -v
 - [x] `presentation/menu.py` sigue funcionando sin cambios.
 - [x] `CHANGELOG.md` con entrada nueva siguiendo SemVer (incremento menor: añade observabilidad sin romper la API existente).
 - [x] `README.md` y `docs/EJECUCION.md` actualizados (mencionan `/ayuda`, el fichero `.log` y cómo desactivar o reconfigurar el logging si hace falta).
+
+
+
+
+# UT4e3 - Plantillas Jinja2
+
+Esta es la tercera actividad de la serie en la que se amplia el `app.py` del proyecto personal con Flask. En las entregas anteriores (`ut4e1` y `ut4e2`) se expusieron como rutas todas las operaciones del menu de consola y se anadio la capa de observabilidad (manejadores de error, `/ayuda` y logging). En esta entrega se introducen plantillas Jinja2 para sacar el HTML inline de `app.py` y unificar la presentacion: una plantilla base con cabecera y navegacion, y plantillas hijas para cada vista. Aplica los patrones trabajados en el lab a4 de la expendedora.
+
+En esta entrega solo se crean plantillas para las rutas que devuelven informacion (listados, detalles, busqueda, ayuda, errores). Las rutas que requieren que el usuario introduzca datos manualmente quedan tal como estan; esas se veran al trabajar los formularios HTML, donde se integraran de forma natural en plantillas con sus propios campos de entrada. Lo que se sustituye ahora es el HTML construido a mano en los routes de lectura y en los manejadores de error.
+
+## Pasos
+
+1. Crear en la carpeta de inicio del proyecto (sincronizada en Codeberg/GitHub) una carpeta (o una rama) de nombre `05-flask-03`, copiando el contenido de `05-flask-02` (resultado de la entrega `ut4e2`).
+
+2. Estudiar como referencia el lab a4 de la expendedora y los apuntes de la Fase 4. En esta entrega no hay guia personal: los patrones son universales y se aplican igual al dominio que sea.
+
+3. Aplicar al proyecto personal los aspectos trabajados en el lab a4, adaptandolos al dominio. Se trata de trasladar lo aprendido sin reinventar nada; el lab y los apuntes ya explican el como. Aspectos a cubrir:
+
+- Plantilla base `base.html` con la estructura comun y bloques.
+- Plantillas hijas para las vistas de lectura, extendiendo de `base.html`.
+- Sintaxis Jinja2: inyeccion de valores, iteracion, condicionales y filtros (incluido el formato de numeros con separador decimal local si tu dominio lo necesita).
+- Conversion tupla -> diccionario en el route cuando el servicio devuelva tuplas.
+- `url_for` en plantillas para los enlaces.
+- Plantilla comun `error.html` reutilizada por los manejadores `@app.errorhandler(404)` y `@app.errorhandler(500)` de `ut4e2`.
+- Verificar que la cabecera con navegacion aparece en todas las paginas, incluidas las de error 404 y 500. Si una pagina la pierde, suele ser porque la plantilla hija no extiende de `base.html` o porque algun route sigue devolviendo HTML inline en lugar de `render_template`.
+
+4. Hacer commits periodicos y sincronizar en la nube (`push`) el repositorio para que el profesor pueda revisar esta fase del proyecto.
+
+5. Actualizar la documentacion con los cambios aplicados en esta fase. Al menos los siguientes ficheros se ven afectados:
+
+```text
+CHANGELOG.md
+README.md
+docs/EJECUCION.md  <- nota sobre la nueva carpeta de plantillas
+```
+
+## Checklist para esta fase
+
+- [ ] Carpeta `05-flask-03/` creada con el contenido de `05-flask-02/` como base.
+- [ ] Aspectos del lab a4 aplicados al proyecto personal: plantilla base, plantillas hijas extendiendo de `base.html`, sintaxis Jinja2 (filtros incluidos), conversion tupla -> dict cuando aplique, `url_for` en plantillas, plantilla comun para errores 404/500.
+- [ ] Se han generado plantillas para todas las rutas que muestran informacion del proyecto.
+- [ ] Los routes de lectura usan `render_template` en lugar de devolver texto o HTML inline.
+- [ ] La cabecera con navegacion es visible en todas las paginas, incluidas las de error 404 y 500.
+- [ ] `domain/` e `infrastructure/` sin cambios. `application/` solo anade metodos de delegacion pura si hace falta.
+- [ ] `presentation/menu.py` sigue funcionando sin cambios.
+- [ ] `CHANGELOG.md` con entrada nueva siguiendo SemVer (incremento menor: anade plantillas sin romper la API existente).
+- [ ] `README.md` y `docs/EJECUCION.md` actualizados (mencionan la carpeta `presentation/templates/` y el patron de herencia con `base.html`).
 
 
 </details>
