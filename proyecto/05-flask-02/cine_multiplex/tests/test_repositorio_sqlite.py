@@ -45,17 +45,14 @@ class TestRepositorioSQLite(unittest.TestCase):
         self.assertEqual(sala_recuperada.capacidad_maxima, 100)
         self.assertEqual(sala_recuperada.tecnologia_pantalla, "2D")
 
-    def test_actualizar_sala_existente(self):
-        """Prueba que al guardar una sala con el mismo número, se actualiza en lugar de duplicarse."""
+    def test_guardar_sala_duplicada(self):
+        """Prueba que al guardar una sala con un número ya existente se lanza EntidadDuplicadaError."""
         sala_original = Sala(2, 50, "3D")
         self.repo.guardar_sala(sala_original)
         
-        sala_modificada = Sala(2, 80, "IMAX")
-        self.repo.guardar_sala(sala_modificada)
-        
-        sala_recuperada = self.repo.obtener_sala_por_numero(2)
-        self.assertEqual(sala_recuperada.capacidad_maxima, 80)
-        self.assertEqual(sala_recuperada.tecnologia_pantalla, "IMAX")
+        sala_duplicada = Sala(2, 80, "IMAX")
+        with self.assertRaises(EntidadDuplicadaError):
+            self.repo.guardar_sala(sala_duplicada)
 
     def test_listar_salas(self):
         """Prueba listar todas las salas guardadas."""

@@ -6,6 +6,11 @@ from cine_multiplex.presentation.menu import MenuCine
 
 def main():
     """Arranque de la aplicación y wiring de dependencias."""
+    from pathlib import Path
+    if not Path("cine.db").exists():
+        print("Base de datos no encontrada. Generando con datos iniciales...")
+        import crear_bd
+        
     repositorio_cine = RepositorioSQLite("cine.db")
     
     servicio_cine = ServicioCine(repositorio_cine)

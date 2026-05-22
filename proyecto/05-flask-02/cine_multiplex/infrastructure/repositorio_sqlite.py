@@ -55,15 +55,6 @@ class RepositorioSQLite(RepositorioCine):
         query = """
             INSERT INTO peliculas (titulo, duracion_minutos, clasificacion, genero, esta_en_cartelera, tipo_pelicula, distribuidora, edad_minima, anio_lanzamiento)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(titulo) DO UPDATE SET
-                duracion_minutos=excluded.duracion_minutos,
-                clasificacion=excluded.clasificacion,
-                genero=excluded.genero,
-                esta_en_cartelera=excluded.esta_en_cartelera,
-                tipo_pelicula=excluded.tipo_pelicula,
-                distribuidora=excluded.distribuidora,
-                edad_minima=excluded.edad_minima,
-                anio_lanzamiento=excluded.anio_lanzamiento
         """
         
         tipo_pelicula = "COMERCIAL"
@@ -116,9 +107,6 @@ class RepositorioSQLite(RepositorioCine):
         query = """
             INSERT INTO salas (numero, capacidad_maxima, tecnologia_pantalla)
             VALUES (?, ?, ?)
-            ON CONFLICT(numero) DO UPDATE SET
-                capacidad_maxima=excluded.capacidad_maxima,
-                tecnologia_pantalla=excluded.tecnologia_pantalla
         """
         self._ejecutar_consulta(query, (s.numero, s.capacidad_maxima, s.tecnologia_pantalla), commit=True)
 
@@ -136,20 +124,30 @@ class RepositorioSQLite(RepositorioCine):
 
     # --- SESIONES ---
     def guardar_sesion(self, s):
-        query = """
-            INSERT INTO sesiones (id_sesion, pelicula_titulo, sala_numero, fecha_hora, numero_asientos_ocupados, estado_sesion)
-            VALUES (?, ?, ?, ?, ?, ?)
-            ON CONFLICT(id_sesion) DO UPDATE SET
-                pelicula_titulo=excluded.pelicula_titulo,
-                sala_numero=excluded.sala_numero,
-                fecha_hora=excluded.fecha_hora,
-                numero_asientos_ocupados=excluded.numero_asientos_ocupados,
-                estado_sesion=excluded.estado_sesion
-        """
-        self._ejecutar_consulta(query, (
-            s.id_sesion, s.pelicula.titulo, s.sala.numero, s.fecha_hora,
-            s.numero_asientos_ocupados, s._estado_sesion
-        ), commit=True)
+        existe = self._ejecutar_consulta("SELECT 1 FROM sesiones WHERE id_sesion = ?", (s.id_sesion,), fetch_one=True)
+        if existe:
+            query = """
+                UPDATE sesiones SET
+                    pelicula_titulo = ?,
+                    sala_numero = ?,
+                    fecha_hora = ?,
+                    numero_asientos_ocupados = ?,
+                    estado_sesion = ?
+                WHERE id_sesion = ?
+            """
+            self._ejecutar_consulta(query, (
+                s.pelicula.titulo, s.sala.numero, s.fecha_hora,
+                s.numero_asientos_ocupados, s._estado_sesion, s.id_sesion
+            ), commit=True)
+        else:
+            query = """
+                INSERT INTO sesiones (id_sesion, pelicula_titulo, sala_numero, fecha_hora, numero_asientos_ocupados, estado_sesion)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """
+            self._ejecutar_consulta(query, (
+                s.id_sesion, s.pelicula.titulo, s.sala.numero, s.fecha_hora,
+                s.numero_asientos_ocupados, s._estado_sesion
+            ), commit=True)
 
     def _mapear_sesion(self, fila):
         if not fila: return None
@@ -179,11 +177,6 @@ class RepositorioSQLite(RepositorioCine):
         query = """
             INSERT INTO entradas (id_entrada, sesion_id, precio_euros, categoria_tarifa, fecha_venta)
             VALUES (?, ?, ?, ?, ?)
-            ON CONFLICT(id_entrada) DO UPDATE SET
-                sesion_id=excluded.sesion_id,
-                precio_euros=excluded.precio_euros,
-                categoria_tarifa=excluded.categoria_tarifa,
-                fecha_venta=excluded.fecha_venta
         """
         fecha_str = e._fecha_venta.strftime("%Y-%m-%d %H:%M:%S") if isinstance(e._fecha_venta, datetime) else str(e._fecha_venta)
         

@@ -88,6 +88,8 @@ class MenuCine:
                 print(f"Error de persistencia: {error}")
             except Exception as error:
                 print(f"Error inesperado: {error}")
+        else:
+            print("Opción no válida.")
 
     def mostrar_menu_salas(self):
         """Submenú de gestión de salas."""
@@ -97,8 +99,13 @@ class MenuCine:
         opcion_seleccionada = input("Opción: ")
         
         if opcion_seleccionada == "1":
-            for sala in self._servicio_cine.listar_salas():
-                print(sala)
+            try:
+                for sala in self._servicio_cine.listar_salas():
+                    print(sala)
+            except ErrorPersistencia as error:
+                print(f"Error de base de datos: {error}")
+            except Exception as error:
+                print(f"Error inesperado: {error}")
         elif opcion_seleccionada == "2":
             try:
                 numero_sala = int(input("Número de sala: "))
@@ -114,6 +121,8 @@ class MenuCine:
                 print(f"Error de persistencia: {error}")
             except Exception as error:
                 print(f"Error inesperado: {error}")
+        else:
+            print("Opción no válida.")
 
     def mostrar_menu_sesiones(self):
         """Submenú de gestión de sesiones."""
@@ -123,9 +132,14 @@ class MenuCine:
         opcion_seleccionada = input("Opción: ")
         
         if opcion_seleccionada == "1":
-            for sesion in self._servicio_cine.listar_sesiones():
-                estado_disponibilidad = "LLENA" if sesion.numero_asientos_libres == 0 else f"Libres: {sesion.numero_asientos_libres}"
-                print(f"{sesion} | {estado_disponibilidad}")
+            try:
+                for sesion in self._servicio_cine.listar_sesiones():
+                    estado_disponibilidad = "LLENA" if sesion.numero_asientos_libres == 0 else f"Libres: {sesion.numero_asientos_libres}"
+                    print(f"{sesion} | {estado_disponibilidad}")
+            except ErrorPersistencia as error:
+                print(f"Error de base de datos: {error}")
+            except Exception as error:
+                print(f"Error inesperado: {error}")
         elif opcion_seleccionada == "2":
             identificador_sesion = input("ID Sesión (único): ")
             nombre_pelicula = input("Título Película: ")
@@ -146,6 +160,8 @@ class MenuCine:
                 print(f"Error de persistencia: {error}")
             except Exception as error:
                 print(f"Error inesperado: {error}")
+        else:
+            print("Opción no válida.")
 
     def mostrar_menu_ventas(self):
         """Submenú de venta de entradas."""
@@ -160,7 +176,7 @@ class MenuCine:
             categoria_tarifa = input("Tipo Tarifa: ")
             try:
                 entrada = self._servicio_cine.vender_entrada(identificador_sesion, categoria_tarifa)
-                print(f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: ${entrada.precio_euros}")
+                print(f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: {entrada.precio_euros} €")
             except EntidadNoEncontradaError as error:
                 print(f"Error: No se encontró la sesión. ({error})")
             except ValueError as error:
@@ -186,6 +202,11 @@ class MenuCine:
 
     def mostrar_menu_estadisticas(self):
         """Visualiza informe de ventas."""
-        estadisticas_ventas = self._servicio_cine.informe_ventas()
-        print(f"\nTotal Recaudado: ${estadisticas_ventas['total_recaudado']:.2f}")
-        print(f"Entradas Vendidas: {estadisticas_ventas['entradas_vendidas']}")
+        try:
+            estadisticas_ventas = self._servicio_cine.informe_ventas()
+            print(f"\nTotal Recaudado: {estadisticas_ventas['total_recaudado']:.2f} €")
+            print(f"Entradas Vendidas: {estadisticas_ventas['entradas_vendidas']}")
+        except ErrorPersistencia as error:
+            print(f"Error de base de datos: {error}")
+        except Exception as error:
+            print(f"Error inesperado: {error}")
