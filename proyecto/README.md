@@ -182,6 +182,56 @@ coverage run -m unittest discover cine_multiplex/tests; coverage report
 
 </details>
 
+# FASE 05b: UT4E2 — Observabilidad: manejadores de error, introspección y logging
+
+Esta es la segunda actividad de la serie en la que se amplía el `app.py` del proyecto personal con Flask. En la entrega anterior (`ut4e1`) se crearon rutas para todas las operaciones del menú de consola; en esta entrega se añade una capa de observabilidad global que no depende del dominio: manejadores de error 404 y 500, una ruta `/ayuda` que se autoactualiza listando todas las rutas registradas, y registro de cada petición en un fichero `.log`. Se aplican los patrones trabajados en el lab a3 de la expendedora.
+
+## Instrucciones
+
+1. Abre tu terminal en la raíz de la fase actual:
+```powershell
+cd proyecto/05-flask-02
+```
+
+2. Instala dependencias necesarias:
+```powershell
+pip install -r requirements.txt
+```
+
+3. Inicializar la base de datos (opcional — se autocrea al arrancar si no existe):
+```powershell
+python crear_bd.py
+```
+
+4. Ejecuta la aplicación Flask:
+```powershell
+python -m cine_multiplex.presentation.app
+```
+La aplicación web quedará expuesta en `http://127.0.0.1:5000/`.
+
+5. Consultar rutas disponibles: `http://127.0.0.1:5000/ayuda`
+
+6. El fichero de log se genera automáticamente en `cine_multiplex.log` al hacer peticiones.
+
+<details open>
+  <summary>Fase 05b — UT4E2: Observabilidad Flask</summary>
+
+- [ ] Carpeta `05-flask-02/` creada con el contenido de `05-flask-01/` como base.
+- [ ] `@app.errorhandler(404)` registrado y devuelve HTML personalizado al visitar una URL inexistente.
+- [ ] `@app.errorhandler(500)` registrado y devuelve HTML personalizado. Probado provocando una excepción no controlada.
+- [ ] Ruta `/ayuda` que itera `app.url_map.iter_rules()`, filtra `static` y muestra todas las rutas registradas. Al añadir o quitar rutas, `/ayuda` refleja el cambio sin tocar su código.
+- [ ] `logging.basicConfig(...)` configurado al inicio de `app.py` con nombre de fichero `cine_multiplex.log`.
+- [ ] Hook `@app.before_request` registra cada petición con método y ruta.
+- [ ] El fichero `.log` aparece en disco al hacer peticiones, con timestamp y una línea por petición.
+- [ ] `.gitignore` incluye `*.log` y el fichero de log no se versiona.
+- [ ] Coexistencia menú↔web verificada: un alta hecha desde la web aparece en el menú y viceversa.
+- [ ] `domain/` e `infrastructure/` sin cambios; `application/` solo con métodos de delegación pura si los hay.
+- [ ] `presentation/menu.py` sigue funcionando sin cambios.
+- [ ] `CHANGELOG.md` con entrada nueva siguiendo SemVer (incremento menor).
+- [ ] `README.md` y `docs/EJECUCION.md` actualizados (mencionan `/ayuda`, el fichero `.log` y cómo reconfigurar el logging).
+
+</details>
+
 ## Buenas prácticas de desarrollo
 
 - Hacer `pull` antes de empezar a trabajar para tener el repositorio al día.

@@ -9,6 +9,24 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
+## [0.6.0] - 2026-05-22 (Fase 05b: Observabilidad Flask)
+
+Version disponible en la subcarpeta `05-flask-02`
+
+### Added
+- Manejadores globales `@app.errorhandler(404)` y `@app.errorhandler(500)` con respuestas HTML personalizadas.
+- Ruta `/ayuda` generada mediante `app.url_map.iter_rules()` para listar automaticamente las rutas registradas.
+- Configuracion de logging en `presentation/app.py` con salida a `cine_multiplex.log`.
+- Hook `@app.before_request` para registrar cada peticion con metodo HTTP y ruta.
+- `.gitignore` con `*.log` para evitar versionar ficheros de log.
+
+### Changed
+- Actualizados `README.md` y `docs/EJECUCION.md` con instrucciones de observabilidad, ruta `/ayuda` y notas sobre logging.
+
+### Compatibility
+- No hay cambios incompatibles: la API web existente, el menu de consola y las capas `domain/`, `application/` e `infrastructure/` mantienen su comportamiento.
+
+---
 ## [0.5.0] - 2026-05-13 (Fase 05: Flask Web Application)
 
 Versión disponible en la subcarpeta `05-flask-01`

@@ -226,3 +226,70 @@ python -m unittest discover cine_multiplex/tests -v
 - [x] README.md y `docs/EJECUCION.md` actualizados con el comando de arranque y las rutas expuestas.
 
 </details>
+  <summary>Fase 05-2 - Observabilidad: manejadores de error, introspección y logging</summary>
+
+# FASE 05b: UT4E2 — Observabilidad: manejadores de error, introspección y logging
+
+Esta es la segunda actividad de la serie en la que se amplía el `app.py` del proyecto personal con Flask. En la entrega anterior (`ut4e1`) se crearon rutas para todas las operaciones del menú de consola; en esta entrega se añade una capa de observabilidad global que no depende del dominio: manejadores de error 404 y 500, una ruta `/ayuda` que se autoactualiza listando todas las rutas registradas, y registro de cada petición en un fichero `.log`. Se aplican los patrones trabajados en el lab a3 de la expendedora.
+
+En esta entrega los manejadores de error y la página `/ayuda` devuelven HTML construido a mano: cuando se introduzcan las plantillas, se refactorizará para generar desde ahí el HTML.
+
+## Instrucciones
+
+1. Abre tu terminal en la raíz de la fase actual:
+```powershell
+cd proyecto/05-flask-02
+```
+
+2. Instala dependencias necesarias:
+```powershell
+pip install -r requirements.txt
+```
+
+3. Inicializar la base de datos (opcional — se autocrea al arrancar si no existe):
+```powershell
+python crear_bd.py
+```
+
+4. Ejecuta la aplicación Flask:
+```powershell
+python -m cine_multiplex.presentation.app
+```
+La aplicación web quedará expuesta en `http://127.0.0.1:5000/`.
+
+5. Consultar rutas disponibles en: `http://127.0.0.1:5000/ayuda`
+
+6. El fichero de log se genera automáticamente en `cine_multiplex.log` al hacer peticiones.
+   Para desactivar temporalmente el logging, comenta el bloque `logging.basicConfig(...)`
+   y el hook `@app.before_request` en `cine_multiplex/presentation/app.py`.
+   Para reconfigurarlo, cambia `filename`, `level` o `format` en `logging.basicConfig(...)`.
+
+7. Ejecutar el menú por consola (retrocompatibilidad):
+```powershell
+python main.py
+```
+
+8. Ejecutar pruebas unitarias:
+```powershell
+python -m unittest discover cine_multiplex/tests -v
+```
+
+<details open>
+  <summary>Fase 05b — UT4E2: Observabilidad Flask</summary>
+
+- [x] Carpeta `05-flask-02/` creada con el contenido de `05-flask-01/` como base.
+- [x] `@app.errorhandler(404)` registrado y devuelve HTML personalizado al visitar una URL inexistente.
+- [x] `@app.errorhandler(500)` registrado y devuelve HTML personalizado. Probado provocando una excepción no controlada (puede crearse una ruta temporal `/error` para la prueba y eliminarla después).
+- [x] Ruta `/ayuda` que itera `app.url_map.iter_rules()`, filtra `static` y muestra todas las rutas registradas. Al añadir o quitar rutas, `/ayuda` refleja el cambio sin tocar su código.
+- [x] `logging.basicConfig(...)` configurado al inicio de `app.py` con nombre de fichero `cine_multiplex.log`.
+- [x] Hook `@app.before_request` registra cada petición con método y ruta.
+- [x] El fichero `.log` aparece en disco al hacer peticiones, con timestamp y una línea por petición.
+- [x] `.gitignore` incluye `*.log` y el fichero de log no se versiona.
+- [x] Coexistencia menú↔web verificada: un alta hecha desde la web aparece en el menú y viceversa. Verificación anotada en la documentación.
+- [x] `domain/` e `infrastructure/` sin cambios; `application/` solo con métodos de delegación pura si los hay.
+- [x] `presentation/menu.py` sigue funcionando sin cambios.
+- [x] `CHANGELOG.md` con entrada nueva siguiendo SemVer (incremento menor: añade observabilidad sin romper la API existente).
+- [x] `README.md` y `docs/EJECUCION.md` actualizados (mencionan `/ayuda`, el fichero `.log` y cómo desactivar o reconfigurar el logging si hace falta).
+
+
+</details>

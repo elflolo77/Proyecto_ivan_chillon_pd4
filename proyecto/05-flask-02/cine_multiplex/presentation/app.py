@@ -1,6 +1,10 @@
 """Presentación: Rutas de Flask para la aplicación web."""
 
-from flask import Flask, redirect, url_for
+import logging
+from pathlib import Path
+import sys
+
+from flask import Flask, redirect, request, url_for
 
 from cine_multiplex.infrastructure.repositorio_sqlite import RepositorioSQLite
 from cine_multiplex.application.servicio_cine import ServicioCine
@@ -11,8 +15,11 @@ from cine_multiplex.infrastructure.errores import (
     ErrorPersistencia
 )
 
-from pathlib import Path
-import sys
+logging.basicConfig(
+    filename='cine_multiplex.log',
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+)
 
 if not Path("cine.db").exists():
     ruta_proyecto = Path(__file__).resolve().parent.parent.parent
@@ -23,6 +30,26 @@ app = Flask(__name__)
 repositorio_cine = RepositorioSQLite("cine.db")
 servicio = ServicioCine(repositorio_cine)
 
+@app.before_request
+def log_peticion():
+    app.logger.info(f"{request.method} {request.path}")
+
+@app.errorhandler(404)
+def no_encontrado(e):
+    return (
+        "<h1>404 - Pagina no encontrada</h1>"
+        "<p>La ruta solicitada no existe en Cine Flolix.</p>"
+        "<p><a href='/'>Volver al inicio</a></p>"
+    ), 404
+
+@app.errorhandler(500)
+def error_servidor(e):
+    return (
+        "<h1>500 - Error del servidor</h1>"
+        "<p>No se ha podido completar la peticion en Cine Flolix.</p>"
+        "<p><a href='/'>Volver al inicio</a></p>"
+    ), 500
+
 @app.route('/')
 def inicio():
     return ('<h1>Cine Flolix</h1>'
@@ -31,7 +58,18 @@ def inicio():
             '<li><a href="/salas">Ver salas</a></li>'
             '<li><a href="/sesiones">Ver sesiones</a></li>'
             '<li><a href="/informe">Informe de ventas</a></li>'
+            '<li><a href="/ayuda">Ayuda - rutas disponibles</a></li>'
             '</ul>')
+
+@app.route('/ayuda')
+def ayuda():
+    lineas = ["<h1>Rutas disponibles</h1>", "<ul>"]
+    for regla in app.url_map.iter_rules():
+        if regla.endpoint != "static":
+            lineas.append(f"<li><code>{regla.rule}</code> - {regla.endpoint}</li>")
+    lineas.append("</ul>")
+    lineas.append("<p><a href='/'>Volver al inicio</a></p>")
+    return "\n".join(lineas)
 
 # Peliculas
 @app.route('/peliculas')
