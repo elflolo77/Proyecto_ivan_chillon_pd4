@@ -43,6 +43,8 @@ class ServicioCine:
 
     def crear_sala(self, numero_sala, capacidad_maxima, tecnologia_pantalla="2D"):
         """Crea una sala de cine."""
+        if self._repositorio.obtener_sala_por_numero(numero_sala):
+            raise EntidadDuplicadaError(f"La sala {numero_sala} ya existe.")
         sala = Sala(numero_sala, capacidad_maxima, tecnologia_pantalla)
         self._repositorio.guardar_sala(sala)
         return sala
@@ -96,7 +98,9 @@ class ServicioCine:
             "Reducida": PRECIO_BASE_EUROS * 0.8,
             "Estudiante": PRECIO_BASE_EUROS * 0.5
         }
-        precio_venta = tarifas_disponibles.get(categoria_tarifa, PRECIO_BASE_EUROS)
+        if categoria_tarifa not in tarifas_disponibles:
+            raise ValueError(f"Tarifa '{categoria_tarifa}' no válida. Opciones: {list(tarifas_disponibles.keys())}")
+        precio_venta = tarifas_disponibles[categoria_tarifa]
         
         sesion.vender_entrada()
         

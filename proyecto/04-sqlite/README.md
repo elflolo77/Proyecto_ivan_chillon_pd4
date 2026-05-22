@@ -90,6 +90,37 @@ coverage run -m unittest discover cine_multiplex/tests; coverage report
 - [x] Actualizar `README.md` para reflejar estructura y comandos actuales.
 
 </details>
+
+# FASE 04: Persistencia con SQLite
+## Instrucciones
+
+Para inicializar la BD y ejecutar la aplicación en esta fase:
+
+1. Abre tu terminal en la raíz de la fase actual:
+```powershell
+cd proyecto/04-sqlite
+```
+
+2. Inicializar la base de datos (opcional — se autocrea al arrancar si no existe):
+```powershell
+python crear_bd.py
+```
+
+3. Ejecutar la aplicación:
+```powershell
+python main.py
+```
+
+4. Ejecutar las pruebas unitarias:
+```powershell
+python -m unittest discover cine_multiplex/tests -v
+```
+
+5. Ejecutar reporte de cobertura:
+```powershell
+coverage run -m unittest discover cine_multiplex/tests; coverage report
+```
+
 <details open>
   <summary>Fase 04 - persistencia con SQLite</summary>
 
@@ -142,11 +173,13 @@ coverage run -m unittest discover cine_multiplex/tests; coverage report
 
 - [x] Actualizar `CHANGELOG.md` (versión `0.4.0`) con los cambios principales
 - [x] Actualizar `README.md` con instrucciones de cómo ejecutar el script de inicialización
-- [x] Documentar el diseño de la BD en `docs/DISEÑO_BD.md`:
-- [x] (*opcional*) Documentar el contrato de excepciones en `docs/CONTRATO_EXCEPCIONES.md`:
+- [x] Documentar el diseño de la BD en `docs/DISEÑO_BD.md`
+- [x] (*opcional*) Documentar el contrato de excepciones en `docs/CONTRATO_EXCEPCIONES.md`
 
 ### Verificación final
 
-- [x]a aplicación funciona igual desde el punto de vista del usuario (mismo menú, mismas operaciones)
-- [x]Los datos persisten entre ejecuciones (cierra y reabre la app, verifica que los datos están)
+- [x] La aplicación funciona igual desde el punto de vista del usuario (mismo menú, mismas operaciones)
+- [x] Los datos persisten entre ejecuciones (cierra y reabre la app, verifica que los datos están)
 - [x] Los tests pasan todos sin cambios de lógica de dominio
+
+</details>

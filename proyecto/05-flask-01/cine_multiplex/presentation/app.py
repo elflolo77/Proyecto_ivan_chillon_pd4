@@ -11,6 +11,14 @@ from cine_multiplex.infrastructure.errores import (
     ErrorPersistencia
 )
 
+from pathlib import Path
+import sys
+
+if not Path("cine.db").exists():
+    ruta_proyecto = Path(__file__).resolve().parent.parent.parent
+    sys.path.insert(0, str(ruta_proyecto))
+    import crear_bd
+
 app = Flask(__name__)
 repositorio_cine = RepositorioSQLite("cine.db")
 servicio = ServicioCine(repositorio_cine)
@@ -134,7 +142,7 @@ def programar_sesion(identificador, titulo_pelicula, numero_sala, fecha_hora):
 def vender_entrada(identificador_sesion, categoria_tarifa):
     try:
         entrada = servicio.vender_entrada(identificador_sesion, categoria_tarifa)
-        return f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: ${entrada.precio_euros} <a href='/'>Volver</a>"
+        return f"¡Entrada vendida! ID: {entrada.id_entrada} - Precio: {entrada.precio_euros} € <a href='/'>Volver</a>"
     except EntidadNoEncontradaError as e:
         return str(e), 404
     except ValueError as e:
@@ -158,7 +166,7 @@ def anular_entrada(identificador_entrada):
 def informe():
     try:
         estadisticas = servicio.informe_ventas()
-        return (f"Total Recaudado: ${estadisticas['total_recaudado']:.2f}<br>"
+        return (f"Total Recaudado: {estadisticas['total_recaudado']:.2f} €<br>"
                 f"Entradas Vendidas: {estadisticas['entradas_vendidas']}<br>"
                 f"<a href='/'>Volver</a>")
     except ErrorPersistencia as e:

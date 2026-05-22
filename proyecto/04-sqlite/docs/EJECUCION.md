@@ -1,58 +1,50 @@
-# EJECUCIÓN
+# Guía de Ejecución — Fase 04 (SQLite)
 
-Guía rápida para lanzar el programa "Cine Flolix".
+Esta guía describe cómo inicializar, ejecutar y probar la aplicación "Cine Flolix" con persistencia en SQLite.
 
 ## Requisitos previos
-- **Python**: Se requiere cualquier versión funcional de `Python 3.x` (Preferiblemente Python 3.9 o superior).
-- **Dependencias**: El programa no usa módulos de terceros (Pip) ajenos a *The Python Standard Library*. No es necesario montar un Virtual Environment restrictivo ni instalar librerías.
-
-## Comandos
-
-Deberás ubicar tu terminal (PowerShell, Bash o CMD) en la raíz específica de esta fase del proyecto:
-
-```powershell
-cd proyecto/02-documentando
-```
-
-## Ejecución de la Aplicación
-
-Deberás ubicar tu terminal (PowerShell, Bash o CMD) en la raíz específica de esta fase del proyecto (`03-testing`):
-
-```powershell
-python main.py
-```
-
-De inmediato, aparecerá el promt interactivo de la Consola. Las entradas numéricas determinan el progreso del flujo.
-
----
-
-## ACTUALIZACIÓN - 2026-04-15 (Fase 03: Testing)
-
-Para esta fase, se han añadido nuevas capacidades de prueba y medición de cobertura.
-
-### Requisitos adicionales
-- **Dependencias**: Se requiere el paquete `coverage`. Puedes instalarlo con:
+- **Python**: Se requiere Python 3.9 o superior.
+- **Dependencias**: Se requiere el paquete `coverage` para las pruebas unitarias y cobertura de código. Puedes instalarlo con:
   ```powershell
   pip install -r requirements.txt
   ```
 
-### Ejecución en Fase 03
-Ubica tu terminal en la raíz de la fase actual:
-```powershell
-cd proyecto/03-testing
-```
+---
 
-**Ejecutar la aplicación:**
+## Inicialización de la Base de Datos
+
+Antes de ejecutar la aplicación por primera vez, puedes inicializar manualmente la base de datos `cine.db` con el esquema físico y los datos iniciales de prueba (3 películas, 3 salas y 1 sesión de ejemplo).
+
+Ubica tu terminal en la raíz de esta fase del proyecto (`proyecto/04-sqlite`) y ejecuta:
+```powershell
+python crear_bd.py
+```
+> [!NOTE]
+> Este paso es opcional en el arranque inicial, ya que el punto de entrada de la aplicación (`main.py`) detectará automáticamente si `cine.db` no existe y la creará con la estructura inicial.
+
+---
+
+## Ejecución de la Aplicación (Consola)
+
+Para iniciar la interfaz interactiva de consola de Cine Flolix, ubica tu terminal en la raíz de esta fase del proyecto (`proyecto/04-sqlite`) y ejecuta:
 ```powershell
 python main.py
 ```
 
-**Ejecutar pruebas unitarias:**
+Una vez iniciada la aplicación, se mostrará el menú interactivo para realizar la gestión de películas, salas, sesiones, venta de entradas e informes estadísticos. Los datos introducidos se persistirán de manera permanente en el archivo local `cine.db`.
+
+---
+
+## Ejecución de Pruebas Unitarias
+
+Para ejecutar el conjunto de pruebas unitarias asociadas a esta fase del proyecto, ejecuta:
 ```powershell
-python -m unittest discover cine_multiplex/tests
+python -m unittest discover cine_multiplex/tests -v
 ```
 
-**Generar reporte de cobertura:**
+### Reporte de Cobertura de Código
+
+Si deseas comprobar el nivel de cobertura de los tests sobre el código fuente, ejecuta:
 ```powershell
 coverage run -m unittest discover cine_multiplex/tests
 coverage report

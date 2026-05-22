@@ -1,102 +1,77 @@
-# EJECUCIÓN
+# Guía de Ejecución — Fase 05 (Flask Web Application 01)
 
-Guía rápida para lanzar el programa "Cine Flolix".
+Esta guía describe cómo inicializar, ejecutar y probar la aplicación "Cine Flolix" en su versión web con Flask y su versión tradicional de consola, ambas persistiendo en SQLite.
 
 ## Requisitos previos
-- **Python**: Se requiere cualquier versión funcional de `Python 3.x` (Preferiblemente Python 3.9 o superior).
-- **Dependencias**: El programa no usa módulos de terceros (Pip) ajenos a *The Python Standard Library*. No es necesario montar un Virtual Environment restrictivo ni instalar librerías.
-
-## Comandos
-
-Deberás ubicar tu terminal (PowerShell, Bash o CMD) en la raíz específica de esta fase del proyecto:
-
-```powershell
-cd proyecto/02-documentando
-```
-
-## Ejecución de la Aplicación
-
-Deberás ubicar tu terminal (PowerShell, Bash o CMD) en la raíz específica de esta fase del proyecto (`03-testing`):
-
-```powershell
-python main.py
-```
-
-De inmediato, aparecerá el promt interactivo de la Consola. Las entradas numéricas determinan el progreso del flujo.
-
----
-
-## ACTUALIZACIÓN - 2026-04-15 (Fase 03: Testing)
-
-Para esta fase, se han añadido nuevas capacidades de prueba y medición de cobertura.
-
-### Requisitos adicionales
-- **Dependencias**: Se requiere el paquete `coverage`. Puedes instalarlo con:
+- **Python**: Se requiere Python 3.9 o superior.
+- **Dependencias**: Se requieren los paquetes `flask` y `coverage`. Asegúrate de instalarlos mediante el archivo `requirements.txt`:
   ```powershell
   pip install -r requirements.txt
   ```
 
-### Ejecución en Fase 03
-Ubica tu terminal en la raíz de la fase actual:
-```powershell
-cd proyecto/03-testing
-```
+---
 
-**Ejecutar la aplicación:**
-```powershell
-python main.py
-```
+## Inicialización de la Base de Datos
 
-**Ejecutar pruebas unitarias:**
-```powershell
-python -m unittest discover cine_multiplex/tests
-```
+Antes de ejecutar la aplicación por primera vez, puedes inicializar manualmente la base de datos `cine.db` con el esquema físico y los datos iniciales de prueba.
 
-**Generar reporte de cobertura:**
+Ubica tu terminal en la raíz de esta fase del proyecto (`proyecto/05-flask-01`) y ejecuta:
 ```powershell
-coverage run -m unittest discover cine_multiplex/tests
-coverage report
+python crear_bd.py
 ```
+> [!NOTE]
+> Este paso es opcional, ya que tanto la aplicación de consola (`main.py`) como la web con Flask (`app.py`) autocrean de forma dinámica la base de datos `cine.db` si detectan que no existe al arrancar.
 
 ---
 
-## ACTUALIZACIÓN - 2026-05-13 (Fase 05: Flask Web Application)
+## Ejecución de la Aplicación Web (Flask)
 
-Para esta fase, la aplicación se puede servir mediante una interfaz web utilizando Flask.
-
-### Requisitos adicionales
-- **Dependencias**: Se requiere el paquete `flask`. Asegúrate de instalarlo usando el `requirements.txt`:
-  ```powershell
-  pip install -r requirements.txt
-  ```
-
-### Ejecución en Fase 05
-Ubica tu terminal en la raíz de la fase actual:
-```powershell
-cd proyecto/05-flask-01
-```
-
-**Ejecutar la aplicación web:**
+Para arrancar el servidor web de Flask, ubica tu terminal en la raíz de esta fase del proyecto (`proyecto/05-flask-01`) y ejecuta:
 ```powershell
 python -m cine_multiplex.presentation.app
 ```
-La aplicación web quedará expuesta en `http://127.0.0.1:5000/`.
 
-**Rutas expuestas:**
-- `/`: Inicio y enlaces rápidos.
-- `/peliculas`: Listado de películas.
-- `/peliculas/registrar_comercial/...`: Registrar película comercial.
-- `/peliculas/registrar_infantil/...`: Registrar película infantil.
-- `/peliculas/registrar_clasica/...`: Registrar película clásica.
-- `/salas`: Listado de salas.
-- `/salas/crear/...`: Crear sala.
-- `/sesiones`: Listado de sesiones.
-- `/sesiones/programar/...`: Programar sesión.
-- `/entradas/vender/...`: Vender entrada.
-- `/entradas/anular/...`: Anular entrada.
-- `/informe`: Resumen de ventas.
+La aplicación se servirá localmente en: `http://127.0.0.1:5000/`
 
-**Ejecutar el menú por consola (retrocompatibilidad):**
+### Rutas Web Disponibles
+- **Página de Inicio:** `/` (menú con enlaces principales)
+- **Películas:**
+  - Ver catálogo: `/peliculas`
+  - Registrar comercial: `/peliculas/registrar_comercial/<titulo>/<duracion>/<clasificacion>/<genero>/<distribuidora>`
+  - Registrar infantil: `/peliculas/registrar_infantil/<titulo>/<duracion>/<clasificacion>/<genero>/<edad_minima>`
+  - Registrar clásica: `/peliculas/registrar_clasica/<titulo>/<duracion>/<clasificacion>/<genero>/<anio>`
+- **Salas:**
+  - Ver salas: `/salas`
+  - Crear sala: `/salas/crear/<numero_sala>/<capacidad_maxima>/<tecnologia_pantalla>`
+- **Sesiones:**
+  - Ver sesiones: `/sesiones`
+  - Programar sesión: `/sesiones/programar/<identificador>/<titulo_pelicula>/<int:numero_sala>/<fecha_hora>`
+- **Entradas:**
+  - Vender entrada: `/entradas/vender/<identificador_sesion>/<categoria_tarifa>`
+  - Anular entrada: `/entradas/anular/<identificador_entrada>`
+- **Informes:**
+  - Informe de ventas: `/informe`
+
+---
+
+## Ejecución de la Aplicación de Consola
+
+Puedes seguir ejecutando la interfaz de consola interactiva. Para ello, ubica tu terminal en `proyecto/05-flask-01` y ejecuta:
 ```powershell
 python main.py
+```
+
+---
+
+## Ejecución de Pruebas Unitarias
+
+Para ejecutar las pruebas unitarias:
+```powershell
+python -m unittest discover cine_multiplex/tests -v
+```
+
+### Cobertura de Código
+```powershell
+coverage run -m unittest discover cine_multiplex/tests
+coverage report
 ```
