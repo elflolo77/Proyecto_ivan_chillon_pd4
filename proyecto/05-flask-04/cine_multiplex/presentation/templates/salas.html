@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block titulo %}Salas - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Salas</h2>
+{% if salas %}
+<ul>
+    {% for sala in salas %}
+    <li>{{ sala.descripcion }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No hay salas.</p>
+{% endif %}
+{% endblock %}

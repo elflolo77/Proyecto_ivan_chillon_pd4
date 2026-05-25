@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block titulo %}Peliculas - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Peliculas</h2>
+{% if peliculas %}
+<ul>
+    {% for pelicula in peliculas %}
+    <li>{{ pelicula.resumen }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No hay peliculas.</p>
+{% endif %}
+{% endblock %}

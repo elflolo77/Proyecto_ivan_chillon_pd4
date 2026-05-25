@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Inicio</h2>
+<ul>
+    <li><a href="{{ url_for('listar_peliculas') }}">Ver peliculas</a></li>
+    <li><a href="{{ url_for('listar_salas') }}">Ver salas</a></li>
+    <li><a href="{{ url_for('listar_sesiones') }}">Ver sesiones</a></li>
+    <li><a href="{{ url_for('informe') }}">Informe de ventas</a></li>
+    <li><a href="{{ url_for('ayuda') }}">Ayuda - rutas disponibles</a></li>
+</ul>
+{% endblock %}

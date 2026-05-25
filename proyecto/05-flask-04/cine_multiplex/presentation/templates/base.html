@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>{% block titulo %}Cine Flolix{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1><a href="{{ url_for('inicio') }}">Cine Flolix</a></h1>
+        <nav>
+            <a href="{{ url_for('listar_peliculas') }}">Peliculas</a> |
+            <a href="{{ url_for('listar_salas') }}">Salas</a> |
+            <a href="{{ url_for('listar_sesiones') }}">Sesiones</a> |
+            <a href="{{ url_for('informe') }}">Informe</a> |
+            <a href="{{ url_for('ayuda') }}">Ayuda</a>
+        </nav>
+        <hr>
+    </header>
+    <main>
+        {% block contenido %}{% endblock %}
+    </main>
+</body>
+</html>
