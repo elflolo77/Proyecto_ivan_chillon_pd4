@@ -297,7 +297,7 @@ python -m unittest discover cine_multiplex/tests -v
 
 # UT4e3 - Plantillas Jinja2
 
-Esta es la tercera actividad de la serie en la que se amplia el `app.py` del proyecto personal con Flask. En las entregas anteriores (`ut4e1` y `ut4e2`) se expusieron como rutas todas las operaciones del menu de consola y se anadio la capa de observabilidad (manejadores de error, `/ayuda` y logging). En esta entrega se introducen plantillas Jinja2 para sacar el HTML inline de `app.py` y unificar la presentacion: una plantilla base con cabecera y navegacion, y plantillas hijas para cada vista. Aplica los patrones trabajados en el lab a4 de la expendedora.
+Esta es la tercera actividad de la serie en la que se amplia el `app.py` del proyecto personal con Flask. En las entregas anteriores (`ut4e1` y `ut4e2`) se expusieron como rutas todas las operaciones del menu de consola y se anadio la capa de observabilidad (manejadores de error, `/ayuda` y logging). En esta entrega se introducen plantillas Jinja2 para sacar el HTML inline de `app.py` y unificar la presentacion. Las plantillas residen en `cine_multiplex/presentation/templates/`. Se usa una plantilla base `base.html` con cabecera y navegacion comunes, y plantillas hijas que extienden de ella para cada vista.
 
 En esta entrega solo se crean plantillas para las rutas que devuelven informacion (listados, detalles, busqueda, ayuda, errores). Las rutas que requieren que el usuario introduzca datos manualmente quedan tal como estan; esas se veran al trabajar los formularios HTML, donde se integraran de forma natural en plantillas con sus propios campos de entrada. Lo que se sustituye ahora es el HTML construido a mano en los routes de lectura y en los manejadores de error.
 
@@ -329,15 +329,15 @@ docs/EJECUCION.md  <- nota sobre la nueva carpeta de plantillas
 
 ## Checklist para esta fase
 
-- [ ] Carpeta `05-flask-03/` creada con el contenido de `05-flask-02/` como base.
-- [ ] Aspectos del lab a4 aplicados al proyecto personal: plantilla base, plantillas hijas extendiendo de `base.html`, sintaxis Jinja2 (filtros incluidos), conversion tupla -> dict cuando aplique, `url_for` en plantillas, plantilla comun para errores 404/500.
-- [ ] Se han generado plantillas para todas las rutas que muestran informacion del proyecto.
-- [ ] Los routes de lectura usan `render_template` en lugar de devolver texto o HTML inline.
-- [ ] La cabecera con navegacion es visible en todas las paginas, incluidas las de error 404 y 500.
-- [ ] `domain/` e `infrastructure/` sin cambios. `application/` solo anade metodos de delegacion pura si hace falta.
-- [ ] `presentation/menu.py` sigue funcionando sin cambios.
-- [ ] `CHANGELOG.md` con entrada nueva siguiendo SemVer (incremento menor: anade plantillas sin romper la API existente).
-- [ ] `README.md` y `docs/EJECUCION.md` actualizados (mencionan la carpeta `presentation/templates/` y el patron de herencia con `base.html`).
+- [x] Carpeta `05-flask-03/` creada con el contenido de `05-flask-02/` como base.
+- [x] Aspectos del lab a4 aplicados al proyecto personal: plantilla base, plantillas hijas extendiendo de `base.html`, sintaxis Jinja2 (filtros incluidos), conversion tupla -> dict cuando aplique, `url_for` en plantillas, plantilla comun para errores 404/500.
+- [x] Se han generado plantillas para todas las rutas que muestran informacion del proyecto.
+- [x] Los routes de lectura usan `render_template` en lugar de devolver texto o HTML inline.
+- [x] La cabecera con navegacion es visible en todas las paginas, incluidas las de error 404 y 500.
+- [x] `domain/` e `infrastructure/` sin cambios. `application/` solo anade metodos de delegacion pura si hace falta.
+- [x] `presentation/menu.py` sigue funcionando sin cambios.
+- [x] `CHANGELOG.md` con entrada nueva siguiendo SemVer (incremento menor: anade plantillas sin romper la API existente).
+- [x] `README.md` y `docs/EJECUCION.md` actualizados (mencionan la carpeta `presentation/templates/` y el patron de herencia con `base.html`).
 
 
 </details>

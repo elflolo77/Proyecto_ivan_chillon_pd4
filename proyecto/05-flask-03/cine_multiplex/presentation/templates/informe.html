@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block titulo %}Informe - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Informe de ventas</h2>
+<dl>
+    <dt>Total recaudado</dt>
+    <dd>{{ estadisticas.total_recaudado|round(2) }} EUR</dd>
+    <dt>Entradas vendidas</dt>
+    <dd>{{ estadisticas.entradas_vendidas }}</dd>
+</dl>
+{% endblock %}

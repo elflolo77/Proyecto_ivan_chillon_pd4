@@ -64,6 +64,50 @@ http://127.0.0.1:5000/
 
 ---
 
+## Ejecución Fase 05c (Plantillas Jinja2)
+
+1. Abre tu terminal en la raíz de esta fase actual:
+```powershell
+cd proyecto/05-flask-03
+```
+
+2. Instala dependencias necesarias:
+```powershell
+pip install -r requirements.txt
+```
+
+3. Verifica que las plantillas Jinja2 están en `cine_multiplex/presentation/templates/`, con `base.html` como plantilla base y plantillas hijas extendiendo sus bloques.
+
+4. Ejecuta la aplicación Flask:
+```powershell
+python -m cine_multiplex.presentation.app
+```
+La aplicación web se sirve localmente en:
+
+```text
+http://127.0.0.1:5000/
+```
+
+5. Comprueba que la cabecera de navegación aparece en todas las páginas, incluidas las de error 404 y 500, gracias al patrón de herencia de `base.html`.
+
+6. Consulta rutas disponibles en:
+
+```text
+http://127.0.0.1:5000/ayuda
+```
+
+7. Ejecutar el menú por consola (retrocompatibilidad):
+```powershell
+python main.py
+```
+
+8. Ejecutar pruebas unitarias:
+```powershell
+python -m unittest discover cine_multiplex/tests -v
+```
+
+---
+
 ## Observabilidad y logging
 
 La aplicacion registra cada peticion HTTP con metodo y ruta mediante el hook `@app.before_request`.

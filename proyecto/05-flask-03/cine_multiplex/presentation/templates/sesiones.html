@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block titulo %}Sesiones - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Sesiones</h2>
+{% if sesiones %}
+<ul>
+    {% for sesion in sesiones %}
+    <li>{{ sesion.descripcion }} | {{ sesion.estado_disponibilidad }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No hay sesiones.</p>
+{% endif %}
+{% endblock %}

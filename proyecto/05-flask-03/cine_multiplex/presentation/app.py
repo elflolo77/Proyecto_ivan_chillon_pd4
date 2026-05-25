@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 import sys
 
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, render_template, request, url_for
 
 from cine_multiplex.infrastructure.repositorio_sqlite import RepositorioSQLite
 from cine_multiplex.application.servicio_cine import ServicioCine
@@ -36,50 +36,41 @@ def log_peticion():
 
 @app.errorhandler(404)
 def no_encontrado(e):
-    return (
-        "<h1>404 - Pagina no encontrada</h1>"
-        "<p>La ruta solicitada no existe en Cine Flolix.</p>"
-        "<p><a href='/'>Volver al inicio</a></p>"
+    return render_template(
+        "error.html",
+        codigo=404,
+        titulo="Pagina no encontrada",
+        mensaje="La ruta solicitada no existe en Cine Flolix.",
     ), 404
 
 @app.errorhandler(500)
 def error_servidor(e):
-    return (
-        "<h1>500 - Error del servidor</h1>"
-        "<p>No se ha podido completar la peticion en Cine Flolix.</p>"
-        "<p><a href='/'>Volver al inicio</a></p>"
+    return render_template(
+        "error.html",
+        codigo=500,
+        titulo="Error del servidor",
+        mensaje="No se ha podido completar la peticion en Cine Flolix.",
     ), 500
 
 @app.route('/')
 def inicio():
-    return ('<h1>Cine Flolix</h1>'
-            '<ul>'
-            '<li><a href="/peliculas">Ver películas</a></li>'
-            '<li><a href="/salas">Ver salas</a></li>'
-            '<li><a href="/sesiones">Ver sesiones</a></li>'
-            '<li><a href="/informe">Informe de ventas</a></li>'
-            '<li><a href="/ayuda">Ayuda - rutas disponibles</a></li>'
-            '</ul>')
+    return render_template("inicio.html")
 
 @app.route('/ayuda')
 def ayuda():
-    lineas = ["<h1>Rutas disponibles</h1>", "<ul>"]
-    for regla in app.url_map.iter_rules():
-        if regla.endpoint != "static":
-            lineas.append(f"<li><code>{regla.rule}</code> - {regla.endpoint}</li>")
-    lineas.append("</ul>")
-    lineas.append("<p><a href='/'>Volver al inicio</a></p>")
-    return "\n".join(lineas)
+    reglas = [regla for regla in app.url_map.iter_rules() if regla.endpoint != "static"]
+    return render_template("ayuda.html", reglas=reglas)
 
 # Peliculas
 @app.route('/peliculas')
 def listar_peliculas():
     try:
         peliculas = servicio.listar_peliculas()
-        if not peliculas:
-            return 'No hay películas.'
-        lineas = [p.obtener_resumen_pelicula() for p in peliculas]
-        return '<br>'.join(lineas)
+        peliculas_vista = [
+            {"resumen": pelicula.obtener_resumen_pelicula()}
+            for pelicula in peliculas
+        ]
+        return render_template("peliculas.html", peliculas=peliculas_vista)
     except ErrorPersistencia as e:
         return str(e), 500
 
@@ -125,10 +116,8 @@ def registrar_pelicula_clasica(titulo, duracion, clasificacion, genero, anio):
 def listar_salas():
     try:
         salas = servicio.listar_salas()
-        if not salas:
-            return 'No hay salas.'
-        lineas = [str(s) for s in salas]
-        return '<br>'.join(lineas)
+        salas_vista = [{"descripcion": str(sala)} for sala in salas]
+        return render_template("salas.html", salas=salas_vista)
     except ErrorPersistencia as e:
         return str(e), 500
 
@@ -149,13 +138,20 @@ def crear_sala(numero_sala, capacidad_maxima, tecnologia_pantalla):
 def listar_sesiones():
     try:
         sesiones = servicio.listar_sesiones()
-        if not sesiones:
-            return 'No hay sesiones.'
-        lineas = []
-        for s in sesiones:
-            estado_disponibilidad = "LLENA" if s.numero_asientos_libres == 0 else f"Libres: {s.numero_asientos_libres}"
-            lineas.append(f"{s} | {estado_disponibilidad}")
-        return '<br>'.join(lineas)
+        sesiones_vista = []
+        for sesion in sesiones:
+            estado_disponibilidad = (
+                "LLENA"
+                if sesion.numero_asientos_libres == 0
+                else f"Libres: {sesion.numero_asientos_libres}"
+            )
+            sesiones_vista.append(
+                {
+                    "descripcion": str(sesion),
+                    "estado_disponibilidad": estado_disponibilidad,
+                }
+            )
+        return render_template("sesiones.html", sesiones=sesiones_vista)
     except ErrorPersistencia as e:
         return str(e), 500
 
@@ -204,9 +200,7 @@ def anular_entrada(identificador_entrada):
 def informe():
     try:
         estadisticas = servicio.informe_ventas()
-        return (f"Total Recaudado: {estadisticas['total_recaudado']:.2f} €<br>"
-                f"Entradas Vendidas: {estadisticas['entradas_vendidas']}<br>"
-                f"<a href='/'>Volver</a>")
+        return render_template("informe.html", estadisticas=estadisticas)
     except ErrorPersistencia as e:
         return str(e), 500
 

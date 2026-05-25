@@ -9,6 +9,24 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
+## [0.7.0] - 2026-05-25 (Fase 05c: Plantillas Jinja2)
+
+Versión disponible en la subcarpeta `05-flask-03`
+
+### Added
+- Plantillas Jinja2 en `cine_multiplex/presentation/templates/`.
+- Plantilla base `base.html` con la estructura común, cabecera de navegación y bloques reutilizables.
+- Plantillas hijas extendiendo de `base.html` para las rutas de lectura, la página `/ayuda` y los errores 404/500.
+- Uso de `render_template` en las rutas que muestran información, evitando HTML inline.
+- Conversión de colecciones/tuplas a diccionarios cuando fue necesario para simplificar la inyección de datos.
+
+### Changed
+- Actualizado `README.md` y `docs/EJECUCION.md` para documentar la nueva carpeta de templates y el patrón de herencia con `base.html`.
+
+### Compatibility
+- `domain/` e `infrastructure/` sin cambios; `presentation/menu.py` sigue funcionando sin cambios.
+
+---
 ## [0.6.0] - 2026-05-22 (Fase 05b: Observabilidad Flask)
 
 Version disponible en la subcarpeta `05-flask-02`
