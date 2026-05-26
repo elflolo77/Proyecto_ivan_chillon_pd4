@@ -49,7 +49,6 @@ python main.py
 - [x] `docs/TROUBLESHOOTING.md`
 </details>
 
-
 # FASE III. TESTING
 ## Instrucciones
 
@@ -341,3 +340,91 @@ docs/EJECUCION.md  <- nota sobre la nueva carpeta de plantillas
 
 
 </details>
+
+# UT4e4 — Formularios HTML y método POST
+Esta es la cuarta actividad de la serie en la que se amplía el app.py del proyecto personal con Flask. En las entregas anteriores (ut4e1, ut4e2, ut4e3) se expusieron como rutas todas las operaciones del menú de consola, se añadió la capa de observabilidad (manejadores de error, /ayuda y logging) y se introdujeron las plantillas Jinja2 para sacar el HTML inline de los routes de lectura. En esta entrega se convierten las operaciones de escritura del proyecto en formularios HTML con método POST, validación con re-render y patrón Post/Redirect/Get. Aplica los patrones trabajados en el lab a5 de la expendedora.
+
+En ut4e1 se expusieron como rutas todas las operaciones del menú, incluidas las que modifican estado (altas, bajas, ediciones, cambios…), con los datos viajando en la propia URL (/operacion/<param1>/<param2>/...). Eso funciona como ejercicio pero tiene varios problemas: la URL queda visible en el historial, F5 repite la acción sin avisar, una vista previa de chat o una precarga del navegador puede dispararla, y el tamaño está limitado. La solución estándar es mover esos datos al cuerpo de una petición POST a través de un formulario HTML. Esta entrega aplica ese cambio a todas las operaciones de escritura del proyecto personal.
+
+Pasos
+Crear en la carpeta de inicio del proyecto (sincronizada en Codeberg/GitHub) una carpeta (o una rama) de nombre 05-flask-04, copiando el contenido de 05-flask-03 (resultado de la entrega ut4e3).
+
+Estudiar como referencia el lab a5 de la expendedora y los apuntes de la Fase 5. En esta entrega no hay guía personal: los patrones son universales y se aplican igual al dominio que sea.
+
+Para cada operación de escritura del proyecto (alta, modificación, baja, y cualquier otra que cambie estado en el dominio), aplicar los siguientes elementos:
+
+Una plantilla HTML del formulario en presentation/templates/, que extienda de base.html y muestre los campos necesarios (<input>, <select>, <textarea>...). Cada campo con su name, el <form> con method="post" y action="{{ url_for(...) }}".
+Un route con methods=['GET', 'POST'] sobre la misma URL: el GET renderiza el formulario vacío (o con los datos actuales si es una edición); el POST procesa los datos, llama al servicio del dominio y actúa según el resultado.
+Manejo de errores con re-render: si el dominio lanza una excepción (formato incorrecto, regla de negocio, conflicto, recurso no encontrado), capturarla y volver a renderizar el formulario con los datos tecleados conservados y un mensaje de error visible. Devolver el código HTTP adecuado (400 para validación de tipo/negocio, 404 para no encontrado, 409 para conflicto).
+Tras éxito, patrón Post/Redirect/Get: devolver redirect(url_for(...)) a una ruta de lectura coherente (ficha del recurso, listado, etc.). Nunca devolver HTML directamente tras un POST con éxito.
+Para las eliminaciones, patrón de confirmación: el GET muestra una página "¿seguro que quieres eliminar X?" con los datos del recurso para que el usuario sepa qué va a borrar; el POST sobre la misma URL ejecuta la baja y redirige.
+Para las acciones de escritura sin pantalla previa (un botón que se pulsa desde otra pantalla, sin formulario propio), un route que solo acepte methods=['POST']. Acceder a esa URL con GET responderá 405 Method Not Allowed automáticamente — es justo lo que queremos.
+Reestructurar las rutas de escritura siguiendo el patrón del lab a5. Lo importante es que ninguna acción de escritura se dispare por GET; cómo quede el path de cada URL es secundario. En el lab a5 vimos varias formas de hacerlo (formulario único en /insertar, /eliminar/<codigo> con confirmación GET + acción POST, /cancelar solo POST sin pantalla previa…). Aplica el patrón que mejor encaje a cada operación de tu dominio mirando esos casos como referencia.
+
+Verificar que ninguna acción de escritura del proyecto queda accesible por GET. Recorre todas las rutas de la app y comprueba que cualquier URL que modifique estado requiere POST. Si quedara un GET con efectos secundarios, F5 lo repetiría sin avisar.
+
+Hacer commits periódicos y sincronizar en la nube (push) el repositorio para que el profesor pueda revisar esta fase del proyecto.
+
+Actualizar la documentación con los cambios aplicados en esta fase. Al menos los siguientes ficheros se ven afectados:
+
+├── CHANGELOG.md
+├── README.md
+└── docs
+    └── EJECUCION.md                ← lista actualizada de rutas con sus verbos HTTP
+## Ejecucion Fase 05d
+
+1. Abre tu terminal en la raiz de esta fase:
+
+```powershell
+cd proyecto/05-flask-04
+```
+
+2. Instala dependencias:
+
+```powershell
+pip install -r requirements.txt
+```
+
+3. Ejecuta la aplicacion Flask:
+
+```powershell
+python -m cine_multiplex.presentation.app
+```
+
+La aplicacion queda disponible en:
+
+```text
+http://127.0.0.1:5000/
+```
+
+## Rutas y verbos HTTP
+
+- `GET /`: inicio.
+- `GET /ayuda`: rutas registradas.
+- `GET /peliculas`: listado de peliculas.
+- `GET, POST /peliculas/registrar_comercial`: formulario y alta de pelicula comercial.
+- `GET, POST /peliculas/registrar_infantil`: formulario y alta de pelicula infantil.
+- `GET, POST /peliculas/registrar_clasica`: formulario y alta de pelicula clasica.
+- `GET /salas`: listado de salas.
+- `GET, POST /salas/crear`: formulario y alta de sala.
+- `GET /sesiones`: listado de sesiones.
+- `GET, POST /sesiones/programar`: formulario y programacion de sesion.
+- `GET, POST /entradas/vender`: formulario y venta de entrada.
+- `GET, POST /entradas/anular`: formulario para buscar la entrada a anular.
+- `GET, POST /entradas/anular/<identificador_entrada>`: confirmacion y anulacion de entrada.
+- `GET /informe`: informe de ventas.
+
+## Checklist para esta fase
+
+- [x] Carpeta `05-flask-04/` creada con el contenido de `05-flask-03/` como base.
+- [x] Cada operacion de escritura del proyecto tiene su propia plantilla HTML de formulario en `presentation/templates/`, extendiendo de `base.html`.
+- [x] Las routes correspondientes aceptan `methods=['GET', 'POST']` (o solo `['POST']` si la accion no necesita pantalla previa) y separan claramente las dos ramas con `if request.method == 'POST'`.
+- [x] Tras un POST con exito, patron Post/Redirect/Get aplicado: `return redirect(url_for(...))` a una ruta de lectura. Ninguna respuesta de exito devuelve HTML directamente.
+- [x] Tras un POST con error, el formulario se re-renderiza con los datos tecleados conservados y un mensaje de error visible. El codigo HTTP devuelto es coherente (400, 404, 409).
+- [x] Las eliminaciones requieren confirmacion: GET muestra la pantalla "seguro?" con los datos del recurso, POST sobre la misma URL ejecuta la baja y redirige.
+- [x] Las rutas viejas de escritura (las que en ut4e1 aceptaban GET con los datos en la URL) se han reestructurado siguiendo los patrones del lab a5: formulario propio, confirmacion GET + accion POST, o ruta solo-POST segun corresponda.
+- [x] Verificacion final recorriendo la app: ninguna URL accesible por GET modifica estado del dominio.
+- [x] `domain/` e `infrastructure/` sin cambios; `application/` solo con metodos de delegacion pura si los hay.
+- [x] `presentation/menu.py` sigue funcionando sin cambios.
+- [x] `CHANGELOG.md` con entrada nueva `0.8.0`.
+- [x] `README.md` y `docs/EJECUCION.md` actualizados con la lista de rutas y los verbos HTTP que acepta cada una.

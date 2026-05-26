@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block titulo %}Confirmar anulacion - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Confirmar anulacion</h2>
+<p>Entrada: <strong>{{ entrada.id_entrada }}</strong></p>
+<p>Sesion: {{ entrada.sesion.id_sesion }} - {{ entrada.sesion.pelicula.titulo }}</p>
+<p>Tarifa: {{ entrada.categoria_tarifa }}</p>
+<p>Precio: {{ entrada.precio_euros|round(2) }} EUR</p>
+<form method="post">
+    <button type="submit">Confirmar anulacion</button>
+    <a href="{{ url_for('informe') }}">Cancelar</a>
+</form>
+{% endblock %}

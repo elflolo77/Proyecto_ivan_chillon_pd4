@@ -9,6 +9,25 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
+## [0.8.0] - 2026-05-25 (Fase 05d: Formularios HTML y POST)
+
+Version disponible en la subcarpeta `05-flask-04`.
+
+### Added
+- Formularios HTML en `cine_multiplex/presentation/templates/` para las operaciones de escritura.
+- Rutas `GET`/`POST` para registrar peliculas, crear salas, programar sesiones, vender entradas y anular entradas.
+- Pantalla de confirmacion para anular entradas antes de ejecutar la baja.
+
+### Changed
+- Las rutas de escritura ya no modifican estado mediante `GET` con datos en la URL.
+- Las operaciones con `POST` correcto aplican Post/Redirect/Get hacia rutas de lectura.
+- Los formularios con error se vuelven a renderizar conservando los datos introducidos y mostrando un mensaje.
+- Actualizados `README.md` y `docs/EJECUCION.md` con rutas y verbos HTTP.
+
+### Compatibility
+- `domain/`, `infrastructure/` y `presentation/menu.py` sin cambios.
+
+---
 ## [0.7.0] - 2026-05-25 (Fase 05c: Plantillas Jinja2)
 
 Versión disponible en la subcarpeta `05-flask-03`

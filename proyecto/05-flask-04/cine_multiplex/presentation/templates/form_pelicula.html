@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block titulo %}Registrar pelicula - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Registrar pelicula {{ tipo }}</h2>
+{% if error %}
+<p><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+<form method="post">
+    <p>
+        <label>Titulo
+            <input type="text" name="titulo" value="{{ datos.titulo|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Duracion en minutos
+            <input type="number" name="duracion" min="1" value="{{ datos.duracion|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Clasificacion
+            <input type="text" name="clasificacion" value="{{ datos.clasificacion|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Genero
+            <input type="text" name="genero" value="{{ datos.genero|default('') }}" required>
+        </label>
+    </p>
+    {% if tipo == "comercial" %}
+    <p>
+        <label>Distribuidora
+            <input type="text" name="distribuidora" value="{{ datos.distribuidora|default('') }}" required>
+        </label>
+    </p>
+    {% elif tipo == "infantil" %}
+    <p>
+        <label>Edad minima
+            <input type="number" name="edad_minima" min="0" value="{{ datos.edad_minima|default('') }}" required>
+        </label>
+    </p>
+    {% elif tipo == "clasica" %}
+    <p>
+        <label>Anio de lanzamiento
+            <input type="number" name="anio" min="1888" value="{{ datos.anio|default('') }}" required>
+        </label>
+    </p>
+    {% endif %}
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}
