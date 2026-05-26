@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block titulo %}Vender entrada - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Vender entrada</h2>
+{% if error %}
+<p><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+<form method="post">
+    <p>
+        <label>Sesion
+            <select name="identificador_sesion" required>
+                <option value="">Selecciona una sesion</option>
+                {% for sesion in sesiones %}
+                <option value="{{ sesion.id_sesion }}" {% if datos.identificador_sesion == sesion.id_sesion %}selected{% endif %}>{{ sesion }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </p>
+    <p>
+        <label>Tarifa
+            <select name="categoria_tarifa" required>
+                {% for tarifa in tarifas %}
+                <option value="{{ tarifa }}" {% if datos.categoria_tarifa == tarifa %}selected{% endif %}>{{ tarifa }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </p>
+    <button type="submit">Vender</button>
+</form>
+{% endblock %}

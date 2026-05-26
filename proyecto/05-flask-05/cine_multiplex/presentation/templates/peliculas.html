@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block titulo %}Peliculas - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Peliculas</h2>
+<p>
+    <a href="{{ url_for('registrar_pelicula_comercial') }}">Nueva comercial</a> |
+    <a href="{{ url_for('registrar_pelicula_infantil') }}">Nueva infantil</a> |
+    <a href="{{ url_for('registrar_pelicula_clasica') }}">Nueva clasica</a>
+</p>
+{% if peliculas %}
+<ul>
+    {% for pelicula in peliculas %}
+    <li>{{ pelicula.resumen }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No hay peliculas.</p>
+{% endif %}
+{% endblock %}

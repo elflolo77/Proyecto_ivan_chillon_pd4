@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block titulo %}Crear sala - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Crear sala</h2>
+{% if error %}
+<p><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+<form method="post">
+    <p>
+        <label>Numero de sala
+            <input type="number" name="numero_sala" min="1" value="{{ datos.numero_sala|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Capacidad maxima
+            <input type="number" name="capacidad_maxima" min="1" value="{{ datos.capacidad_maxima|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Tecnologia de pantalla
+            <input type="text" name="tecnologia_pantalla" value="{{ datos.tecnologia_pantalla|default('2D') }}" required>
+        </label>
+    </p>
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

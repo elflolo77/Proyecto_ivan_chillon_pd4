@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block titulo %}Informe - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Informe de ventas</h2>
+<dl>
+    <dt>Total recaudado</dt>
+    <dd>{{ estadisticas.total_recaudado|round(2) }} EUR</dd>
+    <dt>Entradas vendidas</dt>
+    <dd>{{ estadisticas.entradas_vendidas }}</dd>
+</dl>
+
+<h3>Entradas</h3>
+{% if entradas %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Sesion</th>
+            <th>Pelicula</th>
+            <th>Tarifa</th>
+            <th>Precio</th>
+            <th>Accion</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entrada in entradas %}
+        <tr>
+            <td><strong>{{ entrada.id_entrada }}</strong></td>
+            <td>{{ entrada.sesion.id_sesion }}</td>
+            <td>{{ entrada.sesion.pelicula.titulo }}</td>
+            <td>{{ entrada.categoria_tarifa }}</td>
+            <td>{{ entrada.precio_euros|round(2) }} EUR</td>
+            <td>
+                <a href="{{ url_for('anular_entrada', identificador_entrada=entrada.id_entrada) }}">Anular</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay entradas vendidas.</p>
+{% endif %}
+{% endblock %}

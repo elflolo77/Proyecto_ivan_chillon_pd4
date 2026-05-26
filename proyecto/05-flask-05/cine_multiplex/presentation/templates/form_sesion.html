@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block titulo %}Programar sesion - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Programar sesion</h2>
+{% if error %}
+<p><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+<form method="post">
+    <p>
+        <label>Identificador
+            <input type="text" name="identificador" value="{{ datos.identificador|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Pelicula
+            <select name="titulo_pelicula" required>
+                <option value="">Selecciona una pelicula</option>
+                {% for pelicula in peliculas %}
+                <option value="{{ pelicula.titulo }}" {% if datos.titulo_pelicula == pelicula.titulo %}selected{% endif %}>{{ pelicula.titulo }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </p>
+    <p>
+        <label>Sala
+            <select name="numero_sala" required>
+                <option value="">Selecciona una sala</option>
+                {% for sala in salas %}
+                <option value="{{ sala.numero }}" {% if datos.numero_sala|string == sala.numero|string %}selected{% endif %}>Sala {{ sala.numero }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </p>
+    <p>
+        <label>Fecha y hora
+            <input type="text" name="fecha_hora" placeholder="YYYY-MM-DD HH:MM" value="{{ datos.fecha_hora|default('') }}" required>
+        </label>
+    </p>
+    <button type="submit">Programar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block titulo %}Sesiones - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Sesiones</h2>
+<p>
+    <a href="{{ url_for('programar_sesion') }}">Programar sesion</a> |
+    <a href="{{ url_for('vender_entrada') }}">Vender entrada</a>
+</p>
+{% if sesiones %}
+<ul>
+    {% for sesion in sesiones %}
+    <li>{{ sesion.descripcion }} | {{ sesion.estado_disponibilidad }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No hay sesiones.</p>
+{% endif %}
+{% endblock %}
