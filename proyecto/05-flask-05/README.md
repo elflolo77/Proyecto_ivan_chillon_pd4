@@ -428,3 +428,106 @@ http://127.0.0.1:5000/
 - [x] `presentation/menu.py` sigue funcionando sin cambios.
 - [x] `CHANGELOG.md` con entrada nueva `0.8.0`.
 - [x] `README.md` y `docs/EJECUCION.md` actualizados con la lista de rutas y los verbos HTTP que acepta cada una.
+
+# UT4e5 — Flash y API REST (Fase 05e)
+
+Esta es la quinta actividad de la serie Flask. En las entregas anteriores se expusieron rutas, se añadió observabilidad, se introdujeron plantillas Jinja2 y se migraron las escrituras a formularios POST. En esta entrega se cierran dos aspectos que quedaban pendientes: el feedback al usuario tras una acción (mensajes flash) y una API REST mínima que demuestra que la capa de servicio es independiente de la presentación.
+
+## Ejecución Fase 05e
+
+1. Abre tu terminal en la raíz de esta fase:
+
+```powershell
+cd proyecto/05-flask-05
+```
+
+2. Instala dependencias:
+
+```powershell
+pip install -r requirements.txt
+```
+
+3. Ejecuta la aplicación Flask:
+
+```powershell
+python -m cine_multiplex.presentation.app
+```
+
+La aplicación queda disponible en:
+
+```text
+http://127.0.0.1:5000/
+```
+
+## Rutas y verbos HTTP
+
+- `GET /`: inicio.
+- `GET /ayuda`: rutas registradas.
+- `GET /peliculas`: listado de películas.
+- `GET, POST /peliculas/registrar_comercial`: formulario y alta de película comercial.
+- `GET, POST /peliculas/registrar_infantil`: formulario y alta de película infantil.
+- `GET, POST /peliculas/registrar_clasica`: formulario y alta de película clásica.
+- `GET /salas`: listado de salas.
+- `GET, POST /salas/crear`: formulario y alta de sala.
+- `GET /sesiones`: listado de sesiones.
+- `GET, POST /sesiones/programar`: formulario y programación de sesión.
+- `GET, POST /entradas/vender`: formulario y venta de entrada.
+- `GET, POST /entradas/anular`: formulario para buscar la entrada a anular.
+- `GET, POST /entradas/anular/<identificador_entrada>`: confirmación y anulación de entrada.
+- `GET /informe`: informe de ventas.
+
+## API REST
+
+La aplicación expone una API REST mínima bajo `/api/`. Los endpoints comparten exactamente la misma capa de servicio (`ServicioCine`) que la interfaz web y devuelven JSON puro sin paginación ni filtros.
+
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| GET | `/api/peliculas` | Lista completa de películas |
+| GET | `/api/peliculas/<titulo>` | Detalle de una película por título (404 si no existe) |
+| GET | `/api/sesiones` | Lista completa de sesiones |
+| GET | `/api/sesiones/<id>` | Detalle de una sesión por identificador (404 si no existe) |
+
+### Ejemplos con curl
+
+Listar todas las películas:
+
+```bash
+curl http://127.0.0.1:5000/api/peliculas
+```
+
+Obtener detalle de una película:
+
+```bash
+curl "http://127.0.0.1:5000/api/peliculas/Inception"
+```
+
+Listar todas las sesiones:
+
+```bash
+curl http://127.0.0.1:5000/api/sesiones
+```
+
+Obtener detalle de una sesión:
+
+```bash
+curl http://127.0.0.1:5000/api/sesiones/s1
+```
+
+Recurso no encontrado (devuelve JSON con clave `error` y código 404):
+
+```bash
+curl -i http://127.0.0.1:5000/api/peliculas/NoExiste
+```
+
+## Checklist para esta fase
+
+- [x] Carpeta `05-flask-05/` creada con el contenido de `05-flask-04/` como base.
+- [x] `app.secret_key` declarada en `app.py` justo tras crear la app.
+- [x] Mensajes flash funcionando tras operaciones de escritura exitosas que redirigen a páginas de lectura.
+- [x] `base.html` muestra los flash con su categoría usando `get_flashed_messages(with_categories=true)`.
+- [x] Cuatro endpoints `/api/...` que devuelven JSON con `jsonify` y comparten servicio con la interfaz web.
+- [x] El endpoint de detalle, al recibir un identificador inexistente, devuelve JSON con clave `error` y código de estado 404.
+- [x] Todos los tests del proyecto siguen pasando.
+- [x] `CHANGELOG.md` con entrada nueva `0.10.0`.
+- [x] `README.md` actualizado con una sección de API REST que documenta los endpoints y ejemplos de curl.
+- [x] `docs/EJECUCION.md` menciona la API REST y cómo invocarla desde otra terminal con curl.

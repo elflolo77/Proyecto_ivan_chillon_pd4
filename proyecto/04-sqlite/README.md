@@ -1,31 +1,32 @@
-
-# Fase 02: Documentación y Refactorización del Diseño en Capas
+# Fase 04: Persistencia con SQLite
 
 ## Descripción General
-Este directorio (`02-documentando`) contiene la evolución del proyecto base originado en la fase 01. En esta fase se ha garantizado la correcta estructuración del código orientándose en Patrones de Diseño, aplicando convenciones de código (PEP-8) y ampliando exhaustivamente la documentación teórica.
+Este directorio (`04-sqlite`) contiene la evolución del proyecto Cine Flolix en su fase de almacenamiento persistente. En esta fase se sustituye el repositorio en memoria por una persistencia real en SQLite (`RepositorioSQLite`), implementando esquemas relacionales físicos y gestionando integridad referencial, transacciones y conversión de excepciones a excepciones de dominio.
 
 ## Documentación del Proyecto
-Toda la documentación arquitectónica, funcional y de reglas de negocio reside encapsulada en la carpeta `docs/`.
-
-Por favor, comienza tu lectura en el índice global:
-👉 **[Acceder a docs/README.md](docs/README.md)**
+Toda la documentación arquitectónica, de diseño de base de datos (`docs/DISEÑO_BD.md`), de excepciones (`docs/CONTRATO_EXCEPCIONES.md`) y guías de ejecución reside en la carpeta `docs/`.
 
 ## Instrucciones Rápidas
 
-Para probar la lógica implementada asilada de Base de Datos en memoria:
+Para inicializar la base de datos y probar la aplicación interactiva de consola:
 
 1. Abre tu terminal y cerciórate de que te encuentras sobre la raíz de la fase actual:
 ```powershell
-cd proyecto/02-documentando
+cd proyecto/04-sqlite
 ```
 
-2. Ejecuta el programa:
+2. Inicializa la base de datos con el esquema físico y datos de prueba:
+```powershell
+python crear_bd.py
+```
+
+3. Ejecuta la aplicación interactiva:
 ```powershell
 python main.py
 ```
 
 <details open>
-  <summary>Fase 02 - documentando</summary>
+  <summary>Fase 04 - SQLite</summary>
 
 - [x] Copiado en subcarpeta `02-documentando` el contenido actual de la carpeta `01-diseno_capas` o se crea una nueva rama para la nueva etapa (antes crear la rama 01-diseno-capas).
 - [x] Renombrar todos los identificadores de modulos, clases, métodos y variables que no cumplan con los [criterios de los apuntes](https://ichigar.codeberg.page/pd4/ut1/recursos/poo_ut1_6_documentacion/#eligiendo-nombres)

@@ -5,14 +5,24 @@ from cine_multiplex.domain.sala import Sala
 
 class Sesion:
     """Representa la proyección de una película en una sala."""
-    def __init__(self, id_sesion, pelicula, sala, fecha_hora):
+    def __init__(self, id_sesion, pelicula, sala, fecha_hora,
+                 numero_asientos_ocupados=0, estado_sesion="programada"):
         """Inicializa una sesión con película, sala y horario."""
         self._id_sesion = id_sesion
         self._pelicula = pelicula
         self._sala = sala
         self._fecha_hora = fecha_hora
-        self._numero_asientos_ocupados = 0
-        self._estado_sesion = "programada" # Estados: programada, completa, cancelada
+        if numero_asientos_ocupados < 0 or numero_asientos_ocupados > sala.capacidad_maxima:
+            raise ValueError("Ocupación inválida.")
+        if estado_sesion not in ("programada", "completa", "cancelada"):
+            raise ValueError("Estado inválido.")
+        self._numero_asientos_ocupados = numero_asientos_ocupados
+        self._estado_sesion = estado_sesion # Estados: programada, completa, cancelada
+
+    @property
+    def estado_sesion(self):
+        """Devuelve el estado actual de la sesión."""
+        return self._estado_sesion
 
     @property
     def id_sesion(self):

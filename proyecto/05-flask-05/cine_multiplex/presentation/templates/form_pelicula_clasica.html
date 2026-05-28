@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block titulo %}Registrar película clásica - Cine Flolix{% endblock %}
+
+{% block contenido %}
+<h2>Registrar película clásica</h2>
+{% if error %}
+<p style="color: red;"><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+<form method="post">
+    <p>
+        <label>Título
+            <input type="text" name="titulo" value="{{ datos.titulo|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Duración en minutos
+            <input type="number" name="duracion" min="1" value="{{ datos.duracion|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Clasificación
+            <input type="text" name="clasificacion" value="{{ datos.clasificacion|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Género
+            <input type="text" name="genero" value="{{ datos.genero|default('') }}" required>
+        </label>
+    </p>
+    <p>
+        <label>Año de lanzamiento
+            <input type="number" name="anio" min="1888" value="{{ datos.anio|default('') }}" required>
+        </label>
+    </p>
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

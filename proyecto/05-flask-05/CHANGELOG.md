@@ -9,6 +9,28 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
+## [0.10.0] - 2026-05-28 (Fase 05e: Mensajes Flash y API REST Mínima)
+
+Versión disponible en la subcarpeta `05-flask-05`.
+
+### Added
+- Configuración de `app.secret_key` para firmar cookies de sesión para los mensajes flash.
+- Mensajes flash de confirmación/éxito integrados en los flujos de escritura: registrar películas (comercial, infantil, clásica), crear sala, programar sesión, vender entrada y anular entrada.
+- Bloque de visualización de mensajes flash por categoría en `base.html`.
+- API REST mínima con endpoints en formato JSON que comparten la misma capa de aplicación (`ServicioCine`):
+  - `GET /api/peliculas` — lista todas las películas.
+  - `GET /api/peliculas/<titulo>` — detalle de una película por título (404 si no existe).
+  - `GET /api/sesiones` — lista todas las sesiones.
+  - `GET /api/sesiones/<id>` — detalle de una sesión por identificador (404 si no existe).
+- Nuevas plantillas específicas separadas para formularios de película por tipo (`form_pelicula_comercial.html`, `form_pelicula_infantil.html`, `form_pelicula_clasica.html`), de acuerdo con los estándares y simplificación de la unidad.
+
+### Changed
+- El repositorio SQLite (`RepositorioSQLite`) ahora usa gestión directa de conexión/cursor estándar (`try/finally`), eliminando el uso de `closing` de `contextlib` y la abstracción genérica de ejecución SQL que no se correspondía con lo enseñado en clase.
+- Modificado el mapeo de películas en el repositorio SQLite usando diccionarios polimórficos de creación en lugar de cadenas complejas de `isinstance` y discriminación por tipo en el guardado.
+- Reconstrucción de entidades de dominio en el repositorio respetando la encapsulación de la orientación a objetos, pasando los parámetros al constructor en lugar de asignar directamente sus atributos protegidos (`_id_entrada`, `_fecha_venta`, `_numero_asientos_ocupados`, `_estado_sesion`).
+- Eliminadas las comprobaciones defensivas innecesarias de tipos en la capa de aplicación.
+
+---
 ## [0.8.0] - 2026-05-25 (Fase 05d: Formularios HTML y POST)
 
 Version disponible en la subcarpeta `05-flask-04`.

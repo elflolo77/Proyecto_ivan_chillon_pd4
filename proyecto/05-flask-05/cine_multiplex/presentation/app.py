@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 import sys
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash, jsonify
 
 from cine_multiplex.application.servicio_cine import ServicioCine
 from cine_multiplex.infrastructure.errores import (
@@ -27,6 +27,7 @@ if not Path("cine.db").exists():
     import crear_bd
 
 app = Flask(__name__)
+app.secret_key = "cambiar-esto-en-produccion"  # solo para desarrollo
 repositorio_cine = RepositorioSQLite("cine.db")
 servicio = ServicioCine(repositorio_cine)
 TARIFAS_ENTRADA = ("General", "Reducida", "Estudiante")
@@ -66,8 +67,7 @@ def _obtener_entrada(identificador_entrada):
 
 def _render_formulario_pelicula(tipo, datos=None, error=None, status=200):
     return render_template(
-        "form_pelicula.html",
-        tipo=tipo,
+        f"form_pelicula_{tipo}.html",
         datos=datos or {},
         error=error,
     ), status
@@ -132,6 +132,7 @@ def registrar_pelicula_comercial():
                 datos["genero"].strip(),
                 datos["distribuidora"].strip(),
             )
+            flash(f"Película comercial '{datos['titulo'].strip()}' registrada con éxito.", "exito")
             return redirect(url_for("listar_peliculas"))
         except EntidadDuplicadaError as e:
             return _render_formulario_pelicula("comercial", datos, str(e), 409)
@@ -154,6 +155,7 @@ def registrar_pelicula_infantil():
                 datos["genero"].strip(),
                 int(datos["edad_minima"]),
             )
+            flash(f"Película infantil '{datos['titulo'].strip()}' registrada con éxito.", "exito")
             return redirect(url_for("listar_peliculas"))
         except EntidadDuplicadaError as e:
             return _render_formulario_pelicula("infantil", datos, str(e), 409)
@@ -176,6 +178,7 @@ def registrar_pelicula_clasica():
                 datos["genero"].strip(),
                 int(datos["anio"]),
             )
+            flash(f"Película clásica '{datos['titulo'].strip()}' registrada con éxito.", "exito")
             return redirect(url_for("listar_peliculas"))
         except EntidadDuplicadaError as e:
             return _render_formulario_pelicula("clasica", datos, str(e), 409)
@@ -205,6 +208,7 @@ def crear_sala():
                 int(datos["capacidad_maxima"]),
                 datos["tecnologia_pantalla"].strip(),
             )
+            flash(f"Sala {datos['numero_sala']} creada con éxito.", "exito")
             return redirect(url_for("listar_salas"))
         except EntidadDuplicadaError as e:
             return _render_formulario_sala(datos, str(e), 409)
@@ -247,6 +251,7 @@ def programar_sesion():
                 int(datos["numero_sala"]),
                 datos["fecha_hora"].strip(),
             )
+            flash(f"Sesión '{datos['identificador'].strip()}' programada con éxito.", "exito")
             return redirect(url_for("listar_sesiones"))
         except EntidadDuplicadaError as e:
             return _render_formulario_sesion(datos, str(e), 409)
@@ -270,6 +275,7 @@ def vender_entrada():
                 datos["identificador_sesion"].strip(),
                 datos["categoria_tarifa"].strip(),
             )
+            flash(f"Entrada vendida con éxito para la sesión '{datos['identificador_sesion'].strip()}'.", "exito")
             return redirect(url_for("informe"))
         except EntidadNoEncontradaError as e:
             return _render_formulario_venta(datos, str(e), 404)
@@ -304,6 +310,7 @@ def anular_entrada(identificador_entrada):
     if request.method == "POST":
         try:
             servicio.anular_entrada(identificador_entrada)
+            flash(f"Entrada '{identificador_entrada}' anulada con éxito.", "exito")
             return redirect(url_for("informe"))
         except ErrorPersistencia as e:
             return str(e), 500
@@ -322,6 +329,89 @@ def informe():
         )
     except ErrorPersistencia as e:
         return str(e), 500
+
+
+# --- Dictionaries Serialization Helpers ---
+
+def _pelicula_a_dict(p):
+    if not p:
+        return None
+    res = {
+        "titulo": p.titulo,
+        "duracion_minutos": p.duracion_minutos,
+        "clasificacion": p.clasificacion,
+        "genero": p.genero,
+        "esta_en_cartelera": p.esta_en_cartelera,
+        "tipo_pelicula": p.tipo,
+    }
+    res.update(p.campos_extra())
+    return res
+
+
+def _sala_a_dict(s):
+    if not s:
+        return None
+    return {
+        "numero": s.numero,
+        "capacidad_maxima": s.capacidad_maxima,
+        "tecnologia_pantalla": s.tecnologia_pantalla
+    }
+
+
+def _sesion_a_dict(s):
+    if not s:
+        return None
+    return {
+        "id_sesion": s.id_sesion,
+        "pelicula": _pelicula_a_dict(s.pelicula),
+        "sala": _sala_a_dict(s.sala),
+        "fecha_hora": s.fecha_hora,
+        "numero_asientos_ocupados": s.numero_asientos_ocupados,
+        "numero_asientos_libres": s.numero_asientos_libres,
+        "estado_sesion": s.estado_sesion
+    }
+
+
+# --- REST API Endpoints ---
+
+@app.route("/api/peliculas")
+def api_listar_peliculas():
+    try:
+        peliculas = [_pelicula_a_dict(p) for p in servicio.listar_peliculas()]
+        return jsonify(peliculas)
+    except ErrorPersistencia as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/peliculas/<titulo>")
+def api_obtener_pelicula(titulo):
+    try:
+        p = repositorio_cine.obtener_pelicula_por_titulo(titulo)
+        if not p:
+            return jsonify({"error": f"Película '{titulo}' no encontrada."}), 404
+        return jsonify(_pelicula_a_dict(p))
+    except ErrorPersistencia as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/sesiones")
+def api_listar_sesiones():
+    try:
+        sesiones = [_sesion_a_dict(s) for s in servicio.listar_sesiones()]
+        return jsonify(sesiones)
+    except ErrorPersistencia as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/sesiones/<id_sesion>")
+def api_obtener_sesion(id_sesion):
+    try:
+        s = servicio.obtener_sesion(id_sesion)
+        if not s:
+            return jsonify({"error": f"Sesión '{id_sesion}' no encontrada."}), 404
+        return jsonify(_sesion_a_dict(s))
+    except ErrorPersistencia as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

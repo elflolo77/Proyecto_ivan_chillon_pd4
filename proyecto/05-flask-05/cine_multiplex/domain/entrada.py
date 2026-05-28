@@ -6,13 +6,18 @@ from cine_multiplex.domain.sesion import Sesion
 
 class Entrada:
     """Ticket de compra para ver una película."""
-    def __init__(self, sesion, precio_euros, categoria_tarifa):
+    def __init__(self, sesion, precio_euros, categoria_tarifa, id_entrada=None, fecha_venta=None):
         """Guarda la sesión elegida y a cuánto se ha vendido."""
-        self._id_entrada = str(uuid.uuid4())[:8]
+        self._id_entrada = id_entrada if id_entrada is not None else str(uuid.uuid4())[:8]
         self._sesion = sesion
         self._precio_euros = precio_euros
         self._categoria_tarifa = categoria_tarifa
-        self._fecha_venta = datetime.now()
+        self._fecha_venta = fecha_venta if fecha_venta is not None else datetime.now()
+
+    @property
+    def fecha_venta(self):
+        """Fecha y hora en que se vendió la entrada."""
+        return self._fecha_venta
 
     @property
     def id_entrada(self):

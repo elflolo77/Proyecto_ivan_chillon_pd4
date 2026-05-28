@@ -63,8 +63,7 @@ class ServicioCine:
         if not sala:
             raise EntidadNoEncontradaError(f"Sala {numero_sala} no encontrada.")
             
-        if not isinstance(fecha_hora_str, str):
-            raise ValueError("La fecha debe ser una cadena de texto.")
+
 
         if self._repositorio.obtener_sesion_por_id(identificador_sesion):
             raise EntidadDuplicadaError(f"ID de sesión '{identificador_sesion}' ya existe.")

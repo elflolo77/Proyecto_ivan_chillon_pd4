@@ -56,25 +56,11 @@ class RepositorioSQLite(RepositorioCine):
             INSERT INTO peliculas (titulo, duracion_minutos, clasificacion, genero, esta_en_cartelera, tipo_pelicula, distribuidora, edad_minima, anio_lanzamiento)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
-        
-        tipo_pelicula = "COMERCIAL"
-        distribuidora = None
-        edad_minima = None
-        anio_lanzamiento = None
-        
-        if isinstance(p, PeliculaComercial):
-            tipo_pelicula = "COMERCIAL"
-            distribuidora = p.distribuidora
-        elif isinstance(p, PeliculaInfantil):
-            tipo_pelicula = "INFANTIL"
-            edad_minima = p.edad_minima
-        elif isinstance(p, PeliculaClasica):
-            tipo_pelicula = "CLASICA"
-            anio_lanzamiento = p.anio_lanzamiento
-            
+        campos = p.campos_extra()
         parametros = (
             p.titulo, p.duracion_minutos, p.clasificacion, p.genero,
-            1 if p.esta_en_cartelera else 0, tipo_pelicula, distribuidora, edad_minima, anio_lanzamiento
+            1 if p.esta_en_cartelera else 0, p.tipo,
+            campos.get("distribuidora"), campos.get("edad_minima"), campos.get("anio_lanzamiento")
         )
         self._ejecutar_consulta(query, parametros, commit=True)
 
@@ -137,7 +123,7 @@ class RepositorioSQLite(RepositorioCine):
             """
             self._ejecutar_consulta(query, (
                 s.pelicula.titulo, s.sala.numero, s.fecha_hora,
-                s.numero_asientos_ocupados, s._estado_sesion, s.id_sesion
+                s.numero_asientos_ocupados, s.estado_sesion, s.id_sesion
             ), commit=True)
         else:
             query = """
@@ -146,7 +132,7 @@ class RepositorioSQLite(RepositorioCine):
             """
             self._ejecutar_consulta(query, (
                 s.id_sesion, s.pelicula.titulo, s.sala.numero, s.fecha_hora,
-                s.numero_asientos_ocupados, s._estado_sesion
+                s.numero_asientos_ocupados, s.estado_sesion
             ), commit=True)
 
     def _mapear_sesion(self, fila):
@@ -158,11 +144,10 @@ class RepositorioSQLite(RepositorioCine):
         
         if not pelicula or not sala:
             return None
-            
-        s = Sesion(id_sesion, pelicula, sala, fecha_hora)
-        s._numero_asientos_ocupados = ocupados
-        s._estado_sesion = estado
-        return s
+
+        return Sesion(id_sesion, pelicula, sala, fecha_hora,
+                      numero_asientos_ocupados=ocupados,
+                      estado_sesion=estado)
 
     def obtener_sesion_por_id(self, id_sesion):
         fila = self._ejecutar_consulta("SELECT * FROM sesiones WHERE id_sesion = ?", (id_sesion,), fetch_one=True)
@@ -178,7 +163,7 @@ class RepositorioSQLite(RepositorioCine):
             INSERT INTO entradas (id_entrada, sesion_id, precio_euros, categoria_tarifa, fecha_venta)
             VALUES (?, ?, ?, ?, ?)
         """
-        fecha_str = e._fecha_venta.strftime("%Y-%m-%d %H:%M:%S") if isinstance(e._fecha_venta, datetime) else str(e._fecha_venta)
+        fecha_str = e.fecha_venta.strftime("%Y-%m-%d %H:%M:%S") if isinstance(e.fecha_venta, datetime) else str(e.fecha_venta)
         
         self._ejecutar_consulta(query, (
             e.id_entrada, e.sesion.id_sesion, e.precio_euros, e.categoria_tarifa, fecha_str
@@ -190,16 +175,13 @@ class RepositorioSQLite(RepositorioCine):
         
         sesion = self.obtener_sesion_por_id(sesion_id)
         if not sesion: return None
-        
-        e = Entrada(sesion, precio, categoria)
-        e._id_entrada = id_entrada
-        
+
         try:
-            e._fecha_venta = datetime.strptime(fecha_venta, "%Y-%m-%d %H:%M:%S")
+            fecha_dt = datetime.strptime(fecha_venta, "%Y-%m-%d %H:%M:%S")
         except ValueError:
-            e._fecha_venta = fecha_venta
-            
-        return e
+            fecha_dt = fecha_venta
+
+        return Entrada(sesion, precio, categoria, id_entrada=id_entrada, fecha_venta=fecha_dt)
 
     def listar_todas_las_entradas(self):
         filas = self._ejecutar_consulta("SELECT * FROM entradas", fetch_all=True)

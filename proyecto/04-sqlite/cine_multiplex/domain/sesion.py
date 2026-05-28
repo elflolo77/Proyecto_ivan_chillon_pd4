@@ -5,14 +5,23 @@ from cine_multiplex.domain.sala import Sala
 
 class Sesion:
     """Representa la proyección de una película en una sala."""
-    def __init__(self, id_sesion, pelicula, sala, fecha_hora):
-        """Inicializa una sesión con película, sala y horario."""
+    def __init__(self, id_sesion, pelicula, sala, fecha_hora,
+                 numero_asientos_ocupados=0, estado_sesion="programada"):
+        """Inicializa una sesión con película, sala y horario.
+
+        Los parámetros opcionales numero_asientos_ocupados y estado_sesion
+        permiten reconstruir una sesión persistida sin saltarse las validaciones.
+        """
         self._id_sesion = id_sesion
         self._pelicula = pelicula
         self._sala = sala
         self._fecha_hora = fecha_hora
-        self._numero_asientos_ocupados = 0
-        self._estado_sesion = "programada" # Estados: programada, completa, cancelada
+        if numero_asientos_ocupados < 0 or numero_asientos_ocupados > sala.capacidad_maxima:
+            raise ValueError("Ocupación inválida: debe estar entre 0 y la capacidad máxima de la sala.")
+        if estado_sesion not in ("programada", "completa", "cancelada"):
+            raise ValueError("Estado inválido: debe ser 'programada', 'completa' o 'cancelada'.")
+        self._numero_asientos_ocupados = numero_asientos_ocupados
+        self._estado_sesion = estado_sesion  # Estados: programada, completa, cancelada
 
     @property
     def id_sesion(self):
@@ -43,6 +52,11 @@ class Sesion:
     def numero_asientos_libres(self):
         """Calcula las butacas disponibles (Capacidad - Ocupación)."""
         return self._sala.capacidad_maxima - self._numero_asientos_ocupados
+
+    @property
+    def estado_sesion(self):
+        """Devuelve el estado actual de la sesión (programada, completa, cancelada)."""
+        return self._estado_sesion
 
     def vender_entrada(self):
         """Registra una venta e incrementa la ocupación."""

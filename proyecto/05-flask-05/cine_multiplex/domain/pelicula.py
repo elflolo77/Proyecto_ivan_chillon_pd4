@@ -44,12 +44,26 @@ class Pelicula:
         """Devuelve resumen textual (implementar en subclases)."""
         raise NotImplementedError
 
+    @property
+    def tipo(self):
+        """Devuelve el tipo de película."""
+        return self.TIPO
+
+    def campos_extra(self):
+        """Devuelve un diccionario con los campos extra de la película."""
+        return {}
+
 class PeliculaComercial(Pelicula):
     """Película de gran difusión comercial."""
+    TIPO = "COMERCIAL"
+
     def __init__(self, titulo, duracion_minutos, clasificacion, genero, distribuidora):
         """Inicializa con distribuidora."""
         super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.distribuidora = distribuidora
+
+    def campos_extra(self):
+        return {"distribuidora": self.distribuidora}
 
     def obtener_resumen_pelicula(self):
         """Resumen especializado para películas comerciales."""
@@ -57,10 +71,15 @@ class PeliculaComercial(Pelicula):
 
 class PeliculaInfantil(Pelicula):
     """Película orientada al público infantil."""
+    TIPO = "INFANTIL"
+
     def __init__(self, titulo, duracion_minutos, clasificacion, genero, edad_minima):
         """Inicializa con edad mínima recomendada."""
         super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.edad_minima = edad_minima
+
+    def campos_extra(self):
+        return {"edad_minima": self.edad_minima}
 
     def obtener_resumen_pelicula(self):
         """Resumen especializado para películas infantiles."""
@@ -68,10 +87,15 @@ class PeliculaInfantil(Pelicula):
 
 class PeliculaClasica(Pelicula):
     """Película considerada un clásico o reestreno."""
+    TIPO = "CLASICA"
+
     def __init__(self, titulo, duracion_minutos, clasificacion, genero, anio_lanzamiento):
         """Inicializa con año de estreno original."""
         super().__init__(titulo, duracion_minutos, clasificacion, genero)
         self.anio_lanzamiento = anio_lanzamiento
+
+    def campos_extra(self):
+        return {"anio_lanzamiento": self.anio_lanzamiento}
 
     def obtener_resumen_pelicula(self):
         """Resumen especializado para películas clásicas."""

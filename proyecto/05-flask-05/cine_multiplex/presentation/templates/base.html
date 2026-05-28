@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <title>{% block titulo %}Cine Flolix{% endblock %}</title>
 </head>
+
 <body>
     <header>
         <h1><a href="{{ url_for('inicio') }}">Cine Flolix</a></h1>
@@ -19,7 +21,17 @@
         <hr>
     </header>
     <main>
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <ul class="flashes">
+                {% for categoria, msg in mensajes %}
+                    <li class="flash flash-{{ categoria }}" style="color: green; font-weight: bold;">{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         {% block contenido %}{% endblock %}
     </main>
 </body>
+
 </html>
