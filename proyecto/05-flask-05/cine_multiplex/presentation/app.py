@@ -331,53 +331,12 @@ def informe():
         return str(e), 500
 
 
-# --- Dictionaries Serialization Helpers ---
-
-def _pelicula_a_dict(p):
-    if not p:
-        return None
-    res = {
-        "titulo": p.titulo,
-        "duracion_minutos": p.duracion_minutos,
-        "clasificacion": p.clasificacion,
-        "genero": p.genero,
-        "esta_en_cartelera": p.esta_en_cartelera,
-        "tipo_pelicula": p.tipo,
-    }
-    res.update(p.campos_extra())
-    return res
-
-
-def _sala_a_dict(s):
-    if not s:
-        return None
-    return {
-        "numero": s.numero,
-        "capacidad_maxima": s.capacidad_maxima,
-        "tecnologia_pantalla": s.tecnologia_pantalla
-    }
-
-
-def _sesion_a_dict(s):
-    if not s:
-        return None
-    return {
-        "id_sesion": s.id_sesion,
-        "pelicula": _pelicula_a_dict(s.pelicula),
-        "sala": _sala_a_dict(s.sala),
-        "fecha_hora": s.fecha_hora,
-        "numero_asientos_ocupados": s.numero_asientos_ocupados,
-        "numero_asientos_libres": s.numero_asientos_libres,
-        "estado_sesion": s.estado_sesion
-    }
-
-
 # --- REST API Endpoints ---
 
 @app.route("/api/peliculas")
 def api_listar_peliculas():
     try:
-        peliculas = [_pelicula_a_dict(p) for p in servicio.listar_peliculas()]
+        peliculas = [p.to_dict() for p in servicio.listar_peliculas()]
         return jsonify(peliculas)
     except ErrorPersistencia as e:
         return jsonify({"error": str(e)}), 500
@@ -386,10 +345,10 @@ def api_listar_peliculas():
 @app.route("/api/peliculas/<titulo>")
 def api_obtener_pelicula(titulo):
     try:
-        p = repositorio_cine.obtener_pelicula_por_titulo(titulo)
-        if not p:
-            return jsonify({"error": f"Película '{titulo}' no encontrada."}), 404
-        return jsonify(_pelicula_a_dict(p))
+        p = servicio.obtener_pelicula(titulo)
+        return jsonify(p.to_dict())
+    except EntidadNoEncontradaError as e:
+        return jsonify({"error": str(e)}), 404
     except ErrorPersistencia as e:
         return jsonify({"error": str(e)}), 500
 
@@ -397,7 +356,7 @@ def api_obtener_pelicula(titulo):
 @app.route("/api/sesiones")
 def api_listar_sesiones():
     try:
-        sesiones = [_sesion_a_dict(s) for s in servicio.listar_sesiones()]
+        sesiones = [s.to_dict() for s in servicio.listar_sesiones()]
         return jsonify(sesiones)
     except ErrorPersistencia as e:
         return jsonify({"error": str(e)}), 500
@@ -407,9 +366,9 @@ def api_listar_sesiones():
 def api_obtener_sesion(id_sesion):
     try:
         s = servicio.obtener_sesion(id_sesion)
-        if not s:
-            return jsonify({"error": f"Sesión '{id_sesion}' no encontrada."}), 404
-        return jsonify(_sesion_a_dict(s))
+        return jsonify(s.to_dict())
+    except EntidadNoEncontradaError as e:
+        return jsonify({"error": str(e)}), 404
     except ErrorPersistencia as e:
         return jsonify({"error": str(e)}), 500
 

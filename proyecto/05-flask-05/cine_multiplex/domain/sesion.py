@@ -74,6 +74,18 @@ class Sesion:
             if self._estado_sesion == "completa" and self.numero_asientos_libres > 0:
                 self._estado_sesion = "programada"
 
+    def to_dict(self):
+        """Devuelve una representación en diccionario de la sesión."""
+        return {
+            "id_sesion": self.id_sesion,
+            "pelicula": self.pelicula.to_dict() if self.pelicula else None,
+            "sala": self.sala.to_dict() if self.sala else None,
+            "fecha_hora": self.fecha_hora,
+            "numero_asientos_ocupados": self.numero_asientos_ocupados,
+            "numero_asientos_libres": self.numero_asientos_libres,
+            "estado_sesion": self.estado_sesion
+        }
+
     def __str__(self):
         """Representación textual de la sesión."""
         return f"Sesion {self.id_sesion}: {self.pelicula.titulo} en Sala {self.sala.numero} a las {self.fecha_hora}"

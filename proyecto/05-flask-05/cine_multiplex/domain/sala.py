@@ -23,6 +23,14 @@ class Sala:
         """Devuelve el tipo de tecnología de pantalla."""
         return self._tecnologia_pantalla
 
+    def to_dict(self):
+        """Devuelve una representación en diccionario de la sala."""
+        return {
+            "numero": self.numero,
+            "capacidad_maxima": self.capacidad_maxima,
+            "tecnologia_pantalla": self.tecnologia_pantalla
+        }
+
     def __str__(self):
         """Representación amigable de la sala."""
         return f"Sala {self.numero} ({self.capacidad_maxima} pax, {self.tecnologia_pantalla})"

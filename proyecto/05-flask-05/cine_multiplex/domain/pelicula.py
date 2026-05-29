@@ -53,6 +53,19 @@ class Pelicula:
         """Devuelve un diccionario con los campos extra de la película."""
         return {}
 
+    def to_dict(self):
+        """Devuelve una representación en diccionario de la película."""
+        res = {
+            "titulo": self.titulo,
+            "duracion_minutos": self.duracion_minutos,
+            "clasificacion": self.clasificacion,
+            "genero": self.genero,
+            "esta_en_cartelera": self.esta_en_cartelera,
+            "tipo_pelicula": self.tipo,
+        }
+        res.update(self.campos_extra())
+        return res
+
 class PeliculaComercial(Pelicula):
     """Película de gran difusión comercial."""
     TIPO = "COMERCIAL"

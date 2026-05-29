@@ -9,7 +9,7 @@ En este documento se incluyen los cambios por entrega/version (nuevas funcionali
 -  Compatibility / Breaking changes (Compatibilidad)
 
 ---
-## [0.10.0] - 2026-05-28 (Fase 05e: Mensajes Flash y API REST Mínima)
+## [0.10.0] / [0.9.0] - 2026-05-28 (Fase 05e: Mensajes Flash y API REST Mínima)
 
 Versión disponible en la subcarpeta `05-flask-05`.
 

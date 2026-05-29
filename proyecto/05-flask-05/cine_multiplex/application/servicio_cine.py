@@ -82,7 +82,17 @@ class ServicioCine:
 
     def obtener_sesion(self, identificador_sesion):
         """Recupera una sesión por ID."""
-        return self._repositorio.obtener_sesion_por_id(identificador_sesion)
+        sesion = self._repositorio.obtener_sesion_por_id(identificador_sesion)
+        if not sesion:
+            raise EntidadNoEncontradaError(f"Sesión '{identificador_sesion}' no encontrada.")
+        return sesion
+
+    def obtener_pelicula(self, titulo):
+        """Recupera una película por título."""
+        pelicula = self._repositorio.obtener_pelicula_por_titulo(titulo)
+        if not pelicula:
+            raise EntidadNoEncontradaError(f"Película '{titulo}' no encontrada.")
+        return pelicula
 
     def vender_entrada(self, identificador_sesion, categoria_tarifa):
         """Vende una entrada aplicando la política de precios."""
